@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   534351: {
     SnakeFactory: {
-      address: "0xa24348d02385696b755025edc39e3eb0d703921d",
+      address: "0xb18a163826d0d21a1be96ada476dcfea7c84757c",
       abi: [
         {
           type: "function",
@@ -90,7 +90,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1741079249.json",
+      deploymentFile: "run-1741099741.json",
       deploymentScript: "Deploy.s.sol",
     },
   },

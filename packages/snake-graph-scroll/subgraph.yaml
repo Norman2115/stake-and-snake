@@ -1,0 +1,26 @@
+specVersion: 1.2.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SnakeFactory
+    network: scroll-sepolia
+    source:
+      address: "0xb18A163826d0D21A1be96Ada476dcfea7C84757c"
+      abi: SnakeFactory
+      startBlock: 8392275
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - GameCreated
+      abis:
+        - name: SnakeFactory
+          file: ./abis/SnakeFactory.json
+      eventHandlers:
+        - event: GameCreated(indexed address,indexed address,uint256,uint8,uint256)
+          handler: handleGameCreated
+      file: ./src/snake-factory.ts
