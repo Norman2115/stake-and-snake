@@ -8,4 +8,51 @@ type GameCreated @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  gameEnded: GameEnded @derivedFrom(field: "game")
+}
+
+type GameEnded @entity(immutable: true) {
+  id: Bytes!
+  game: GameCreated!
+  winners: [Bytes!]! # address[]
+  highestScore: BigInt! # uint256
+  prizeShare: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type GameStarted @entity(immutable: true) {
+  id: Bytes!
+  startTime: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PlayerJoined @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  stakeAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PlayerQuit @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  refundAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ScoreSubmitted @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  score: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
