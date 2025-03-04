@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, Trophy, Users } from "lucide-react";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -10,62 +11,56 @@ const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
 
   return (
-    <>
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+    <div className="flex flex-grow flex-col bg-gray-900 text-white">
+      <main className="container mx-auto flex flex-1 flex-col items-center justify-center px-4 py-12">
+        <div className="mb-8 text-center">
+          <h1 className="mb-4 text-5xl font-bold tracking-tight">
+            <span className="text-green-500">Stake</span> & <span className="text-green-500">Play</span>
           </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col sm:flex-row">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-          </div>
-
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
+          <p className="mx-auto max-w-2xl text-lg text-gray-400">
+            Compete in multiplayer snake battles, stake ETH, and win big in private lobbies or weekly tournaments.
           </p>
         </div>
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
+        <div className="grid w-full max-w-4xl gap-6 md:grid-cols-2">
+          <Link href="/lobbies" className="group">
+            <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-800/50 p-6 transition-all hover:border-green-500/50 hover:bg-gray-800">
+              <Users className="mb-4 h-12 w-12 text-green-500" />
+              <h2 className="mb-2 text-2xl font-bold">Join a Lobby</h2>
+              <p className="mb-4 text-center text-gray-400">
+                Find public games or join private lobbies with your friends
               </p>
+              <button className="group-hover:text-green-500 flex items-center">
+                Browse Lobbies <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
             </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
+          </Link>
+
+          <Link href="/tournaments" className="group">
+            <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-800/50 p-6 transition-all hover:border-green-500/50 hover:bg-gray-800">
+              <Trophy className="mb-4 h-12 w-12 text-green-500" />
+              <h2 className="mb-2 text-2xl font-bold">Weekly Tournaments</h2>
+              <p className="mb-4 text-center text-gray-400">
+                Compete for massive prize pools in our official tournaments
               </p>
+              <button className="group-hover:text-green-500 flex items-center">
+                View Tournaments <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
             </div>
-          </div>
+          </Link>
         </div>
-      </div>
-    </>
+
+        <div className="mt-12 flex flex-col items-center">
+          <h2 className="mb-4 text-2xl font-bold">Create Your Own Game</h2>
+          <button className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-white font-bold">
+            Create Lobby
+          </button>
+        </div>
+      </main>
+      {/* <footer className="border-t border-gray-800 py-6 text-center text-sm text-gray-500">
+        <p>© 2025 CryptoSnake. All game data indexed by The Graph for transparency.</p>
+      </footer> */}
+    </div>
   );
 };
 
