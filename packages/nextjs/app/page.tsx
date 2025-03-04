@@ -18,7 +18,7 @@ const Home: NextPage = () => {
             <span className="text-green-500">Stake</span> & <span className="text-green-500">Play</span>
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-gray-400">
-            Compete in multiplayer snake battles, stake ETH, and win big in private lobbies or weekly tournaments.
+            Compete in multiplayer snake battles, stake ETH or VG, and win big in private lobbies or weekly tournaments.
           </p>
         </div>
 
@@ -52,9 +52,7 @@ const Home: NextPage = () => {
 
         <div className="mt-12 flex flex-col items-center">
           <h2 className="mb-4 text-2xl font-bold">Create Your Own Game</h2>
-          <button className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-white font-bold">
-            Create Lobby
-          </button>
+          <button className="bg-green-500 hover:bg-green-600 px-6 py-3 rounded-lg text-white">Create Lobby</button>
         </div>
       </main>
       {/* <footer className="border-t border-gray-800 py-6 text-center text-sm text-gray-500">
