@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChainSelector } from "./chain-selector";
+import { Trophy } from "lucide-react";
 import { hardhat } from "viem/chains";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
@@ -28,6 +29,11 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Tournaments",
     href: "/tournaments",
+  },
+  {
+    label: "Leaderboard",
+    href: "/leaderboard",
+    icon: <Trophy className="h-4 w-4" />,
   },
   {
     label: "Debug Contracts",
@@ -77,7 +83,7 @@ export const Header = () => {
   );
 
   return (
-    <div className="sticky left-0 top-0 navbar bg-gray-900 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
+    <div className="sticky lg:static left-0 top-0 navbar bg-gray-900 min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
       <div className="navbar-start w-auto lg:w-1/2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
