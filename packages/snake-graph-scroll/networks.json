@@ -1,0 +1,11 @@
+{
+  "scroll-sepolia": {
+    "SnakeFactory": {
+      "address": "0xb18A163826d0D21A1be96Ada476dcfea7C84757c",
+      "startBlock": 8392275
+    },
+    "LobbyGame": {
+      "address": "0x95d41EB23320DC564f1Ea5d489Cf314b29Cc7b14"
+    }
+  }
+}

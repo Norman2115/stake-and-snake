@@ -36,6 +36,10 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <Trophy className="h-4 w-4" />,
   },
   {
+    label: "Test",
+    href: "/test",
+  },
+  {
     label: "Debug Contracts",
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
