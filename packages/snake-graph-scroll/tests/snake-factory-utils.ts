@@ -5,6 +5,7 @@ import { GameCreated } from "../generated/SnakeFactory/SnakeFactory"
 export function createGameCreatedEvent(
   gameAddress: Address,
   creator: Address,
+  name: string,
   stakeAmount: BigInt,
   maxPlayers: i32,
   duration: BigInt
@@ -21,6 +22,9 @@ export function createGameCreatedEvent(
   )
   gameCreatedEvent.parameters.push(
     new ethereum.EventParam("creator", ethereum.Value.fromAddress(creator))
+  )
+  gameCreatedEvent.parameters.push(
+    new ethereum.EventParam("name", ethereum.Value.fromString(name))
   )
   gameCreatedEvent.parameters.push(
     new ethereum.EventParam(

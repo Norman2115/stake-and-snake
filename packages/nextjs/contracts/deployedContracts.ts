@@ -7,12 +7,17 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   534351: {
     SnakeFactory: {
-      address: "0xb18a163826d0d21a1be96ada476dcfea7c84757c",
+      address: "0x52a4c191aab11f08d5ddbdfa411ba0c740605971",
       abi: [
         {
           type: "function",
           name: "createGame",
           inputs: [
+            {
+              name: "_name",
+              type: "string",
+              internalType: "string",
+            },
             {
               name: "_stakeAmount",
               type: "uint256",
@@ -68,6 +73,12 @@ const deployedContracts = {
               internalType: "address",
             },
             {
+              name: "name",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
               name: "stakeAmount",
               type: "uint256",
               indexed: false,
@@ -90,7 +101,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1741099741.json",
+      deploymentFile: "run-1741142297.json",
       deploymentScript: "Deploy.s.sol",
     },
   },

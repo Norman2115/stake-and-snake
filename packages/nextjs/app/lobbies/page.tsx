@@ -1,11 +1,40 @@
 import React from "react";
 import Link from "next/link";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Lock, Plus, Search, Users } from "lucide-react";
 import { NextPage } from "next";
 import LobbyCard from "~~/components/lobby-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+
 const Lobbies: NextPage = () => {
+  console.log("Hello from Lobbies page");
+  const gameQuery = `
+  query {
+    gameCreateds {
+      id
+      gameAddress
+      creator
+      maxPlayers
+      stakeAmount
+      duration
+    }
+  }
+`;
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
+  client
+    .query({
+      query: gql(gameQuery),
+    })
+    .then(data => console.log("Scroll subgraph lobby data: ", data))
+    .catch(err => {
+      console.log("Error fetching data: ", err);
+    });
+
   return (
     <div className="flex flex-grow flex-col bg-gray-900 text-white">
       <main className="container mx-auto flex-1 px-4 py-8">
