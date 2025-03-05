@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Lock, Plus, Search, Users } from "lucide-react";
 import { NextPage } from "next";
+import { CreateLobbyModal } from "~~/components/create-lobby-modal";
 import LobbyCard from "~~/components/lobby-card";
 import LobbyCardTest from "~~/components/lobby-card-test";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
@@ -57,9 +58,7 @@ const Lobbies: NextPage = () => {
           </Link>
           <h1 className="text-3xl font-bold">Game Lobbies</h1>
           <div className="ml-auto flex gap-2">
-            <button className="bg-green-500 hover:bg-green-600 flex items-center p-3 rounded-md text-white text-sm">
-              <Plus className="mr-2 h-4 w-4" /> Create Lobby
-            </button>
+            <CreateLobbyModal />
           </div>
         </div>
 
