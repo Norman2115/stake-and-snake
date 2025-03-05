@@ -9,12 +9,14 @@ contract SnakeFactory {
     event GameCreated(
         address indexed gameAddress,
         address indexed creator,
+        string name,
         uint256 stakeAmount,
         uint8 maxPlayers,
         uint256 duration
     );
 
     function createGame(
+        string memory _name,
         uint256 _stakeAmount,
         uint8 _maxPlayers,
         uint256 _duration
@@ -27,6 +29,7 @@ contract SnakeFactory {
 
         LobbyGame newGame = (new LobbyGame){value: msg.value}(
             msg.sender,
+            _name,
             _stakeAmount,
             _maxPlayers,
             _duration
@@ -37,6 +40,7 @@ contract SnakeFactory {
         emit GameCreated(
             address(newGame),
             msg.sender,
+            _name,
             _stakeAmount,
             _maxPlayers,
             _duration

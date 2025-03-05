@@ -16,6 +16,12 @@
         "internalType": "address"
       },
       {
+        "name": "name",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
         "name": "stakeAmount",
         "type": "uint256",
         "indexed": false,
@@ -40,6 +46,7 @@
     "name": "createGame",
     "type": "function",
     "inputs": [
+      { "name": "_name", "type": "string", "internalType": "string" },
       { "name": "_stakeAmount", "type": "uint256", "internalType": "uint256" },
       { "name": "_maxPlayers", "type": "uint8", "internalType": "uint8" },
       { "name": "_duration", "type": "uint256", "internalType": "uint256" }

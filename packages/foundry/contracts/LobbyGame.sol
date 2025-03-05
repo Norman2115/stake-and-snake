@@ -3,6 +3,7 @@ pragma solidity ^0.8.26;
 
 contract LobbyGame {
     address public creator;
+    string public name;
     uint256 public stakeAmount;
     uint8 public maxPlayers;
     uint256 public duration;
@@ -19,12 +20,14 @@ contract LobbyGame {
 
     constructor(
         address _creator,
+        string memory _name,
         uint256 _stakeAmount,
         uint8 _maxPlayers,
         uint256 _duration
     ) payable {
         require(msg.value == _stakeAmount, "Stake amount mismatch");
         creator = _creator;
+        name = _name;
         stakeAmount = _stakeAmount;
         maxPlayers = _maxPlayers;
         duration = _duration;
@@ -49,7 +52,7 @@ contract LobbyGame {
     modifier onlyCreator() {
         require(
             msg.sender == creator,
-            "Only the game creator can start the game"
+            "Only the game creator can start the game."
         );
         _;
     }
@@ -138,8 +141,6 @@ contract LobbyGame {
         emit GameEnded(winners, highestScore, prizeShare);
     }
 
-    // READ FUNCTIONS FOR DEBUGGING
-
     function getPlayers() external view returns (address payable[] memory) {
         return players;
     }
@@ -165,5 +166,17 @@ contract LobbyGame {
 
     function getDuration() external view returns (uint256) {
         return duration;
+    }
+
+    function isGameStarted() external view returns (bool) {
+        return gameStarted;
+    }
+
+    function getGameName() external view returns (string memory) {
+        return name;
+    }
+
+    function getStakeAmount() external view returns (uint256) {
+        return stakeAmount;
     }
 }

@@ -8,9 +8,9 @@ dataSources:
     name: SnakeFactory
     network: scroll-sepolia
     source:
-      address: "0xb18A163826d0D21A1be96Ada476dcfea7C84757c"
+      address: "0x52a4c191AAb11F08D5ddbDfA411bA0C740605971"
       abi: SnakeFactory
-      startBlock: 8392275
+      startBlock: 8397623
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -21,37 +21,6 @@ dataSources:
         - name: SnakeFactory
           file: ./abis/SnakeFactory.json
       eventHandlers:
-        - event: GameCreated(indexed address,indexed address,uint256,uint8,uint256)
+        - event: GameCreated(indexed address,indexed address,string,uint256,uint8,uint256)
           handler: handleGameCreated
       file: ./src/snake-factory.ts
-templates:
-  - kind: ethereum
-    name: LobbyGame
-    network: scroll-sepolia
-    source:
-      abi: LobbyGame
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.9
-      language: wasm/assemblyscript
-      entities:
-        - GameEnded
-        - GameStarted
-        - PlayerJoined
-        - PlayerQuit
-        - ScoreSubmitted
-      abis:
-        - name: LobbyGame
-          file: ./abis/LobbyGame.json
-      eventHandlers:
-        - event: GameEnded(address[],uint256,uint256)
-          handler: handleGameEnded
-        - event: GameStarted(uint256)
-          handler: handleGameStarted
-        - event: PlayerJoined(indexed address,uint256)
-          handler: handlePlayerJoined
-        - event: PlayerQuit(indexed address,uint256)
-          handler: handlePlayerQuit
-        - event: ScoreSubmitted(indexed address,uint256)
-          handler: handleScoreSubmitted
-      file: ./src/lobby-game.ts

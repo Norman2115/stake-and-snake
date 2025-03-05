@@ -23,12 +23,14 @@ describe("Describe entity assertions", () => {
     let creator = Address.fromString(
       "0x0000000000000000000000000000000000000001"
     )
+    let name = "Example string value"
     let stakeAmount = BigInt.fromI32(234)
     let maxPlayers = 123
     let duration = BigInt.fromI32(234)
     let newGameCreatedEvent = createGameCreatedEvent(
       gameAddress,
       creator,
+      name,
       stakeAmount,
       maxPlayers,
       duration
@@ -58,6 +60,12 @@ describe("Describe entity assertions", () => {
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "creator",
       "0x0000000000000000000000000000000000000001"
+    )
+    assert.fieldEquals(
+      "GameCreated",
+      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
+      "name",
+      "Example string value"
     )
     assert.fieldEquals(
       "GameCreated",
