@@ -16,11 +16,13 @@ const Lobbies: NextPage = () => {
 
   const gameQuery = gql`
     query {
-      gameCreateds {
+      gameCreateds(where: { ended: false }) {
         id
         gameAddress
         creator
         name
+        started
+        ended
         maxPlayers
         stakeAmount
         duration
@@ -38,7 +40,6 @@ const Lobbies: NextPage = () => {
       .query({ query: gameQuery })
       .then(({ data }) => {
         console.log("Scroll subgraph lobby data: ", data);
-        setGames(data.gameCreateds);
       })
       .catch(err => {
         console.log("Error fetching data: ", err);
@@ -155,6 +156,7 @@ const Lobbies: NextPage = () => {
                   maxPlayers={game.maxPlayers}
                   stakeAmount={game.stakeAmount}
                   duration={game.duration}
+                  started={game.started}
                   chainType="scroll"
                 />
               ))}

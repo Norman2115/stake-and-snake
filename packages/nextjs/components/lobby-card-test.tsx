@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Clock, Users } from "lucide-react";
+import abi from "../../snake-graph-scroll/abis/LobbyGame.json";
+import { Clock, Logs, Users } from "lucide-react";
+import { start } from "repl";
 import { parseEther } from "viem";
 import { formatUnits } from "viem";
 import { useAccount, useReadContract, useWatchContractEvent, useWriteContract } from "wagmi";
-// import abi from "../../snake-graph-scroll/abis/LobbyGame.json";
-import abi from "~~/abi/LobbyGame.json";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
 interface LobbyCardProps {
@@ -17,6 +17,7 @@ interface LobbyCardProps {
   maxPlayers: number;
   stakeAmount: string;
   duration: number;
+  started: boolean;
   chainType: "scroll" | "vanar";
 }
 
@@ -27,65 +28,32 @@ export default function LobbyCardTest({
   maxPlayers,
   stakeAmount,
   duration,
+  started,
   chainType,
 }: LobbyCardProps) {
   const router = useRouter();
   const { address: connectedAddress } = useAccount();
 
-  // Watch Contract Events
-  const [eventData, setEventData] = useState<any>(null);
-  useWatchContractEvent({
-    abi: abi,
-    address: address,
-    eventName: "playerJoined",
-    onLogs: logs => {
-      console.log("GameStarted event logs: ", logs);
-      setEventData(logs);
-    },
-  });
-
-  // Fetch game status from the contract
-  const {
-    data: isGameStarted,
-    isLoading: gameStatusLoading,
-    error: gameStatusError,
-  } = useReadContract({
-    abi: abi,
-    address: address,
-    functionName: "isGameStarted",
-  });
-
-  // Fetch prize pool from the contract
   const {
     data: prizePool,
     isLoading: prizePoolLoading,
     error: prizePoolError,
+    refetch: refetchPrizePool,
   } = useReadContract({
     abi: abi,
     address: address,
     functionName: "getPrizePool",
   });
 
-  // Fetch players from the contract
   const {
     data: players,
     isLoading: playersLoading,
     error: playersError,
+    refetch: refetchPlayers,
   } = useReadContract({
     abi: abi,
     address: address,
     functionName: "getPlayers",
-  });
-
-  // Fetch game ended status from the contract
-  const {
-    data: isGameEnded,
-    isLoading: isGameEndedLoading,
-    error: isGameEndedError,
-  } = useReadContract({
-    abi: abi,
-    address: address,
-    functionName: "isGameEnded",
   });
 
   const { writeContractAsync, isPending } = useWriteContract();
@@ -100,7 +68,7 @@ export default function LobbyCardTest({
     });
 
   const handleJoinGame = async () => {
-    if (isGameStarted === true) {
+    if (started === true) {
       return;
     }
 
@@ -110,25 +78,32 @@ export default function LobbyCardTest({
     }
 
     try {
-      await writeTx(writeContractAsyncJoinGame, { blockConfirmations: 1 });
+      await writeTx(writeContractAsyncJoinGame);
       router.push(`/game/${id}`);
     } catch (error) {
       console.log("Unexpected error in writeTx", error);
     }
   };
 
+  useWatchContractEvent({
+    abi: abi,
+    address: address,
+    eventName: "playerJoined",
+    onLogs: logs => {
+      console.log("Player joined event logs: ", logs);
+      refetchPlayers();
+      refetchPrizePool();
+    },
+  });
+
   const chainColor = chainType === "scroll" ? "bg-blue-500/20 text-blue-500" : "bg-purple-500/20 text-purple-500";
 
-  if (playersLoading || gameStatusLoading || prizePoolLoading || isGameEndedLoading) {
-    return <></>;
+  if (playersLoading || prizePoolLoading) {
+    return <>Loading...</>;
   }
 
-  if (playersError || gameStatusError || prizePoolError || isGameEndedError) {
+  if (playersError || prizePoolError) {
     return <div>Error loading data</div>;
-  }
-
-  if (isGameEnded) {
-    return null;
   }
 
   return (
@@ -137,10 +112,10 @@ export default function LobbyCardTest({
         <h3 className="font-medium">{name}</h3>
         <div
           className={`rounded-full px-2 py-0.5 text-xs ${
-            isGameStarted === false ? "bg-green-500/20 text-green-500" : "bg-blue-500/20 text-blue-500"
+            started === false ? "bg-green-500/20 text-green-500" : "bg-blue-500/20 text-blue-500"
           }`}
         >
-          {isGameStarted === false ? "Waiting" : "In Progress"}
+          {started === false ? "Waiting" : "In Progress"}
         </div>
       </div>
       <div className="mb-4 space-y-2 text-sm">
@@ -176,11 +151,11 @@ export default function LobbyCardTest({
       </div>
       <button
         className={`w-full bg-green-500 hover:bg-green-600 px-3 py-3 rounded-md font-medium text-sm ${
-          isGameStarted === false ? "cursor-pointer" : "cursor-not-allowed bg-gray-500"
+          started === false ? "cursor-pointer" : "cursor-not-allowed bg-gray-500"
         }`}
         onClick={handleJoinGame}
       >
-        {isGameStarted === false ? "Join Game" : "On Going"}
+        {started === false ? "Join Game" : "On Going"}
       </button>
     </div>
   );

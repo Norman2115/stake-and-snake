@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import abi from "../../../../snake-graph-scroll/abis/LobbyGame.json";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Crown, Users } from "lucide-react";
 import { formatUnits, parseEther } from "viem";
 import { useWriteContract } from "wagmi";
-// import abi from "../../../../snake-graph-scroll/abis/LobbyGame.json";
-import abi from "~~/abi/LobbyGame.json";
 import GameCanvas from "~~/components/game-canvas";
 import PlayerList from "~~/components/player-list";
 import { useTransactor } from "~~/hooks/scaffold-eth";
