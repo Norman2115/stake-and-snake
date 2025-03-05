@@ -1,39 +1,49 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Lock, Plus, Search, Users } from "lucide-react";
 import { NextPage } from "next";
 import LobbyCard from "~~/components/lobby-card";
+import LobbyCardTest from "~~/components/lobby-card-test";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 
 const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
 
 const Lobbies: NextPage = () => {
-  console.log("Hello from Lobbies page");
-  const gameQuery = `
-  query {
-    gameCreateds {
-      id
-      gameAddress
-      creator
-      maxPlayers
-      stakeAmount
-      duration
+  const [games, setGames] = useState<any[]>([]); // State to store fetched game data
+
+  const gameQuery = gql`
+    query {
+      gameCreateds {
+        id
+        gameAddress
+        creator
+        name
+        maxPlayers
+        stakeAmount
+        duration
+      }
     }
-  }
-`;
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  });
-  client
-    .query({
-      query: gql(gameQuery),
-    })
-    .then(data => console.log("Scroll subgraph lobby data: ", data))
-    .catch(err => {
-      console.log("Error fetching data: ", err);
+  `;
+
+  useEffect(() => {
+    const client = new ApolloClient({
+      uri: APIURL,
+      cache: new InMemoryCache(),
     });
+
+    client
+      .query({ query: gameQuery })
+      .then(({ data }) => {
+        console.log("Scroll subgraph lobby data: ", data);
+        setGames(data.gameCreateds);
+      })
+      .catch(err => {
+        console.log("Error fetching data: ", err);
+      });
+  }, [gameQuery]);
 
   return (
     <div className="flex flex-grow flex-col bg-gray-900 text-white">
@@ -135,6 +145,19 @@ const Lobbies: NextPage = () => {
                 timeLeft="4:00"
                 chainType="vanar"
               />
+              {/* Real Data Testing */}
+              {games.map(game => (
+                <LobbyCardTest
+                  key={game.id}
+                  id={game.id}
+                  address={game.gameAddress}
+                  name={game.name}
+                  maxPlayers={game.maxPlayers}
+                  stakeAmount={game.stakeAmount}
+                  duration={game.duration}
+                  chainType="scroll"
+                />
+              ))}
             </div>
           </TabsContent>
           <TabsContent value="private" className="mt-6">

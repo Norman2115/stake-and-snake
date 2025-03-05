@@ -1,8 +1,0 @@
-{
-  "scroll-sepolia": {
-    "SnakeFactory": {
-      "address": "0x52a4c191AAb11F08D5ddbDfA411bA0C740605971",
-      "startBlock": 8397623
-    }
-  }
-}
