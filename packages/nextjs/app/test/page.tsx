@@ -13,6 +13,12 @@ const Test: NextPage = () => {
     functionName: "getPrizePool",
   });
 
+  const yourData = useReadContract({
+    abi,
+    address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
+    functionName: "yourFunctionName",
+  });
+
   const winners = useReadContract({
     abi,
     address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
@@ -55,7 +61,7 @@ const Test: NextPage = () => {
             address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
             functionName: "joinGame",
             args: [],
-            value: amount,
+            value: parseEther("0.0001"),
           })
         }
       >

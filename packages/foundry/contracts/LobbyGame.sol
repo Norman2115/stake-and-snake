@@ -38,12 +38,21 @@ contract LobbyGame {
         isPlayer[_creator] = true; // Mark creator as registered
     }
 
-    //events
-    event PlayerJoined(address indexed player, uint256 stakeAmount);
-    event PlayerQuit(address indexed player, uint256 refundAmount);
-    event GameStarted(uint256 startTime);
+    // Events
+    event PlayerJoined(
+        address indexed player,
+        uint256 stakeAmount,
+        uint256 newPrizePool
+    );
+    event PlayerQuit(
+        address indexed player,
+        uint256 refundAmount,
+        uint256 newPrizePool
+    );
+    event GameStarted(address contractAddress, uint256 startTime);
     event ScoreSubmitted(address indexed player, uint256 score);
     event GameEnded(
+        address contractAddress,
         address[] winners,
         uint256 highestScore,
         uint256 prizeShare
@@ -66,13 +75,13 @@ contract LobbyGame {
         isPlayer[msg.sender] = true; // Mark as registered
         prizePool += msg.value;
 
-        emit PlayerJoined(msg.sender, msg.value);
+        emit PlayerJoined(msg.sender, msg.value, prizePool);
     }
 
     function startGame() external onlyCreator {
         gameStarted = true;
         startTime = block.timestamp;
-        emit GameStarted(startTime);
+        emit GameStarted(address(this), startTime);
     }
 
     function quitGame() external {
@@ -92,7 +101,8 @@ contract LobbyGame {
             }
         }
         isPlayer[msg.sender] = false; // Mark as unregistered
-        emit PlayerQuit(msg.sender, refundAmount);
+        prizePool -= refundAmount;
+        emit PlayerQuit(msg.sender, refundAmount, prizePool);
     }
 
     function submitScore(uint256 score) external {
@@ -138,7 +148,7 @@ contract LobbyGame {
         for (uint256 i = 0; i < winnerCount; i++) {
             payable(winners[i]).transfer(prizeShare);
         }
-        emit GameEnded(winners, highestScore, prizeShare);
+        emit GameEnded(address(this), winners, highestScore, prizeShare);
     }
 
     function getPlayers() external view returns (address payable[] memory) {
@@ -178,5 +188,9 @@ contract LobbyGame {
 
     function getStakeAmount() external view returns (uint256) {
         return stakeAmount;
+    }
+
+    function isGameEnded() external view returns (bool) {
+        return gameEnded;
     }
 }

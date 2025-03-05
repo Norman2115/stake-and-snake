@@ -45,7 +45,7 @@ export default function LobbyCard({ name, players, maxPlayers, stake, status, ti
         </div>
         <div className="flex items-center justify-between">
           <div className="text-gray-400">Stake</div>
-          <div className="font-medium text-green-500">{stake}</div>
+          <div className={`font-medium rounded px-1.5 py-0.5 ${chainColor}`}>{stake}</div>
         </div>
         <div className="flex items-center justify-between">
           <div className="text-gray-400">Chain</div>
