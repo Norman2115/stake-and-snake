@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import abi from "../../snake-graph-scroll/abis/SnakeFactory.json";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { Switch } from "@radix-ui/react-switch";
 import { log } from "console";
 import { Copy, Plus } from "lucide-react";
 import { formatUnits, parseEther } from "viem";
-import { useWriteContract } from "wagmi";
+import { useWatchContractEvent, useWriteContract } from "wagmi";
 import { useAccount } from "wagmi";
 import {
   Dialog,
@@ -27,6 +28,8 @@ import {
   useTransactor,
 } from "~~/hooks/scaffold-eth";
 
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+
 export function CreateLobbyModal() {
   const { address: connectedAddress } = useAccount();
   const router = useRouter();
@@ -40,8 +43,53 @@ export function CreateLobbyModal() {
   const [isCreating, setIsCreating] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
   const [duration, setDuration] = useState("300");
+  const [newGameData, setNewGameData] = useState<{ gameAddress: string } | null>(null);
 
-  const [newGameAddress, setNewGameAddress] = useState("");
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
+
+  const fetchNewGameData = async () => {
+    const newGameQuery = gql`
+    query {
+      gameCreateds(
+        where: { creator: "${connectedAddress}", ended: false }
+        orderBy: blockTimestamp
+        orderDirection: desc
+        first: 1
+      ) {
+        id
+        gameAddress
+        creator
+        duration
+        stakeAmount
+        name
+        started
+        ended
+        maxPlayers
+        blockTimestamp
+      }
+    }
+  `;
+    client
+      .query({ query: newGameQuery })
+      .then(({ data }) => {
+        console.log("Game data: ", data);
+        setNewGameData(data.gameCreateds[0]);
+      })
+      .catch(err => {
+        console.log("Error fetching winner data: ", err);
+      });
+  };
+
+  useEffect(() => {
+    if (isCreated) {
+      setTimeout(() => {
+        fetchNewGameData();
+      }, 500);
+    }
+  }, [isCreated, connectedAddress]);
 
   const generateLobbyCode = () => {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -71,35 +119,23 @@ export function CreateLobbyModal() {
 
   const handleCreateLobby = async () => {
     try {
+      setIsCreating(true);
       await writeTx(writeContractAsyncCreateLobby);
+      setIsCreating(false);
+      setIsCreated(true);
     } catch (error) {
       console.log("Unexpected error in writeTx", error);
     }
   };
 
-  useScaffoldWatchContractEvent({
-    contractName: "SnakeFactory",
-    eventName: "GameCreated",
-    onLogs: logs => {
-      logs.map(log => {
-        const { gameAddress, creator } = log.args;
-        if (creator === connectedAddress) {
-          setNewGameAddress(gameAddress as string);
-        }
-      });
-    },
-  });
-
   useEffect(() => {
-    if (newGameAddress) {
-      setIsCreating(false);
-      setIsCreated(true);
-      setLobbyCode(generateLobbyCode());
+    setLobbyCode(generateLobbyCode());
+    if (newGameData && isCreated) {
       setTimeout(() => {
-        router.push(`/game/${newGameAddress}`);
-      }, 3000);
+        router.push(`/game/${newGameData.gameAddress}`);
+      }, 1000);
     }
-  }, [newGameAddress, router]);
+  }, [newGameData, router, isCreated]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
