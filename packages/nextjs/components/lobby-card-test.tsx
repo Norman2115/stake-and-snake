@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import abi from "../../snake-graph-scroll/abis/LobbyGame.json";
+import abi from "../../snake-subgraph-scroll/abis/LobbyGame.json";
 import { Clock, Logs, Users } from "lucide-react";
 import { start } from "repl";
 import { parseEther } from "viem";

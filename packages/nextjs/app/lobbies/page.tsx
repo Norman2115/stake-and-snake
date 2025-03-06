@@ -10,32 +10,32 @@ import LobbyCard from "~~/components/lobby-card";
 import LobbyCardTest from "~~/components/lobby-card-test";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
 
 const Lobbies: NextPage = () => {
   const [games, setGames] = useState<any[]>([]); // State to store fetched game data
 
-  const gameQuery = gql`
-    query {
-      gameCreateds(where: { ended: false }) {
-        id
-        gameAddress
-        creator
-        name
-        started
-        ended
-        maxPlayers
-        stakeAmount
-        duration
-      }
-    }
-  `;
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
 
   useEffect(() => {
-    const client = new ApolloClient({
-      uri: APIURL,
-      cache: new InMemoryCache(),
-    });
+    const gameQuery = gql`
+      query {
+        gameCreateds(where: { ended: false }) {
+          id
+          gameAddress
+          creator
+          name
+          started
+          ended
+          maxPlayers
+          stakeAmount
+          duration
+        }
+      }
+    `;
 
     client
       .query({ query: gameQuery })
@@ -46,7 +46,8 @@ const Lobbies: NextPage = () => {
       .catch(err => {
         console.log("Error fetching data: ", err);
       });
-  }, [gameQuery]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-grow flex-col bg-gray-900 text-white">

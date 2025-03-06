@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import abi from "../../../../snake-graph-scroll/abis/LobbyGame.json";
+import abi from "../../../../snake-subgraph-scroll/abis/LobbyGame.json";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Crown, Hand, Settings, Users } from "lucide-react";
 import { formatUnits, parseEther } from "viem";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useReadContract, useWatchContractEvent, useWriteContract } from "wagmi";
 import GameCanvas from "~~/components/game-canvas";
 import PlayerList from "~~/components/player-list";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
 
 export default function GamePage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -20,46 +20,88 @@ export default function GamePage({ params }: { params: { id: string } }) {
 
   const [game, setGame] = useState<any>(null); // State to store fetched game data
   const [gameStarted, setGameStarted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
-  const [potAmount, setPotAmount] = useState("0.75 ETH");
+  const [timeLeft, setTimeLeft] = useState(0); // 3 minutes in seconds
+  const [potAmount, setPotAmount] = useState(0);
   const [highestScore, setHighestScore] = useState(0);
   const [currentScore, setCurrentScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [isScoreSubmitted, setIsScoreSubmitted] = useState(false);
+  const [winnerData, setWinnerData] = useState<any>(null);
+  const [isGameEnded, setIsGameEnded] = useState(false);
 
-  const gameQuery = gql`
-    query {
-      gameCreated(id: "${id}") {
-        gameAddress
-        maxPlayers
-        name
-        stakeAmount
-        duration
-        creator
-        started
-        ended
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache(),
+  });
+
+  const fetchGameData = () => {
+    const gameQuery = gql`
+      query {
+        gameCreated(id: "${id}") {
+          gameAddress
+          maxPlayers
+          name
+          stakeAmount
+          duration
+          creator
+          started
+          ended
+          numOfPlayers
+        }
       }
-    }
-  `;
-
-  useEffect(() => {
-    const client = new ApolloClient({
-      uri: APIURL,
-      cache: new InMemoryCache(),
-    });
-
+    `;
     client
       .query({ query: gameQuery })
       .then(({ data }) => {
         console.log("Scroll subgraph lobby data: ", data);
         setGame(data.gameCreated);
-        console.log(data.gameCreated.stakeAmount);
-        setGameStarted(data.gameCreated.started);
+        setTimeLeft(data.gameCreated.duration);
+        setPotAmount(
+          parseFloat(
+            (parseFloat(data.gameCreated.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+              maximumFractionDigits: 5,
+            }),
+          ) * data.gameCreated.numOfPlayers,
+        );
       })
       .catch(err => {
         console.log("Error fetching data: ", err);
       });
-  }, [gameQuery]);
+  };
+
+  const fetchWinnerData = () => {
+    const winnerQuery = gql`
+      query {
+        gameEndeds(where: {contractAddress: "${id}"}) {
+          id
+          winners
+          highestScore
+          prizeShare
+        }
+      }
+    `;
+    client
+      .query({ query: winnerQuery })
+      .then(({ data }) => {
+        console.log("Winner data: ", data);
+        setWinnerData(data.gameEndeds[0]);
+      })
+      .catch(err => {
+        console.log("Error fetching winner data: ", err);
+      });
+  };
+
+  useEffect(() => {
+    if (isGameEnded) {
+      fetchWinnerData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGameEnded]);
+
+  useEffect(() => {
+    fetchGameData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (gameStarted && timeLeft > 0) {
@@ -103,7 +145,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const handleEndGame = async () => {
     try {
       await writeTx(writeContractAsyncEndGame);
-      router.push(`/lobbies`);
+      setIsGameEnded(true);
     } catch (error) {
       console.log("Unexpected error in writeTx", error);
     }
@@ -121,6 +163,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
     try {
       await writeTx(writeContractAsyncSubmitScore);
       setIsScoreSubmitted(true);
+      console.log("Score submitted: ", highestScore);
     } catch (error) {
       console.log("Unexpected error in writeTx", error);
     }
@@ -133,8 +176,12 @@ export default function GamePage({ params }: { params: { id: string } }) {
     }
   };
 
-  const setGameOverSignal = (value: boolean) => {
-    setGameOver(value);
+  const handleLeaveGame = () => {
+    router.push(`/lobbies`);
+  };
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
   return (
@@ -151,8 +198,8 @@ export default function GamePage({ params }: { params: { id: string } }) {
 
         <div className="grid flex-1 gap-6 md:grid-cols-[1fr_300px]">
           <div className="flex flex-col rounded-lg border border-gray-700 bg-gray-800/50 p-4">
-            <GameCanvas gameStarted={gameStarted} />
-            {!gameStarted && (
+            <GameCanvas gameStarted={gameStarted} onGameOver={onGameOver} timeLeft={timeLeft} />
+            {/* {!gameStarted && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="rounded-lg bg-gray-900/80 p-6 text-center">
                   <h2 className="mb-2 text-xl font-bold">Waiting for players...</h2>
@@ -170,7 +217,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
             {/* {timeLeft === 0 && !isScoreSubmitted && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/70">
                 <div className="rounded-lg bg-gray-800 p-6 text-center">
@@ -231,7 +278,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Total Pot:</span>
-                  <span className="text-green-500 font-medium">{potAmount}</span>
+                  <span className="text-green-500 font-medium">{potAmount} ETH</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Game Mode:</span>
@@ -240,6 +287,10 @@ export default function GamePage({ params }: { params: { id: string } }) {
                 <div className="flex justify-between">
                   <span className="text-gray-400">Time Limit:</span>
                   <span>{formatTime(timeLeft)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Highest Score:</span>
+                  <span>{highestScore}</span>
                 </div>
               </div>
             </div>
@@ -253,6 +304,22 @@ export default function GamePage({ params }: { params: { id: string } }) {
                 <div className="flex">
                   <button
                     className="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md text-sm w-full"
+                    onClick={handleStartGame}
+                  >
+                    Start Game
+                  </button>
+                </div>
+                <div className="flex">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md text-sm w-full"
+                    onClick={handleSubmitScore}
+                  >
+                    Submit Score
+                  </button>
+                </div>
+                <div className="flex">
+                  <button
+                    className="bg-green-500 hover:bg-green-600 px-3 py-2 rounded-md text-sm w-full"
                     onClick={handleEndGame}
                   >
                     End Game
@@ -260,6 +327,58 @@ export default function GamePage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             </div>
+            {isGameEnded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                <div className="rounded-lg bg-gray-900 p-6 text-center max-w-xs w-full">
+                  <h2 className="mb-3 text-xl font-bold">Winner</h2>
+                  <div className="flex flex-col justify-center gap-2">
+                    {Array.isArray(winnerData?.winners) &&
+                      winnerData?.winners.map((winner: any) => (
+                        <div key={winner} className="flex justify-between mb-3">
+                          <div>{formatAddress(winner)}</div>
+                          <div>
+                            {(parseFloat(game.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+                              maximumFractionDigits: 5,
+                            })}{" "}
+                            ETH
+                          </div>
+                        </div>
+                      ))}
+                    {/* <div className="flex justify-between">
+                      <span className="text-gray-400">Total Pot:</span>
+                      <span className="text-green-500 font-medium">{potAmount} ETH</span>
+                    </div> */}
+                    <button
+                      className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-md text-sm"
+                      onClick={handleLeaveGame}
+                    >
+                      Leave Game
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* {winnerData && (
+              <div className="rounded-lg border border-gray-700  bg-gray-800/50 p-4">
+                <div className="mb-4 flex items-center">
+                  <Crown className="mr-2 h-5 w-5 text-yellow-500" />
+                  <h2 className="text-lg font-medium mb-0">Winners</h2>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex flex-col gap-2">
+                    <div className="text-gray-400">Winners:</div>
+                    <div className="flex flex-col gap-2">
+                      {winnerData.winners.map((winner: any) => (
+                        <div key={winner.id} className="flex justify-between">
+                          <div>{formatAddress(winner)}</div>
+                          <div>{winner.prizeShare}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )} */}
           </div>
         </div>
       </main>

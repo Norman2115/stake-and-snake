@@ -5,13 +5,28 @@ import { useEffect, useRef, useState } from "react";
 interface GameCanvasProps {
   gameStarted: boolean;
   onGameOver?: (score: number) => void;
+  timeLeft: number;
 }
 
-export default function GameCanvas({ gameStarted, onGameOver }: GameCanvasProps) {
+export default function GameCanvas({ gameStarted, onGameOver, timeLeft }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameResetTrigger, setGameResetTrigger] = useState(0);
+  const [time, setTime] = useState(timeLeft);
+  const [noRender, setNoRender] = useState(false);
+
+  // useEffect(() => {
+  //   if (gameStarted && time > 0) {
+  //     const timer = setTimeout(() => setTime(time - 1), 1000);
+  //     console.log("time", time);
+  //     return () => clearTimeout(timer);
+  //   } else if (time === 0) {
+  //     setNoRender(true);
+  //     setGameOver(true);
+  //     // if (onGameOver) onGameOver(score);
+  //   }
+  // }, [gameStarted, time]);
 
   const resetGame = () => {
     setScore(0);
@@ -245,20 +260,20 @@ export default function GameCanvas({ gameStarted, onGameOver }: GameCanvasProps)
       window.removeEventListener("resize", updateCanvasSize);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gameStarted, gameOver, onGameOver, gameResetTrigger]);
+  }, [gameStarted, gameOver, gameResetTrigger]);
 
   return (
     <div className="relative h-full w-full">
       <canvas ref={canvasRef} className="h-full w-full rounded-lg" style={{ display: "block" }} />
-      {gameOver && (
+      {gameOver && !noRender && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70">
-          <div className="rounded-lg bg-gray-800 p-6 text-center">
+          <div className="rounded-lg bg-gray-800/50 p-6 text-center max-w-xs w-full">
             <h2 className="mb-2 text-2xl font-bold text-red-500">Game Over!</h2>
-            <p className="mb-4 text-xl">Your score: {score}</p>
-            <div className="flex justify-center gap-2">
+            <p className="mb-4 text-lg">Your score: {score}</p>
+            <div className="flex justify-center gap-2 w-full">
               <button
                 onClick={resetGame}
-                className="rounded-md bg-green-500 px-4 py-2 font-medium text-white hover:bg-green-600"
+                className="rounded-md bg-green-500 px-4 py-2 font-medium text-white hover:bg-green-600 w-full"
               >
                 Play Again
               </button>
