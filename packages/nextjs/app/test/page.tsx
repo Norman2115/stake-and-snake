@@ -102,7 +102,7 @@ const Test: NextPage = () => {
         onClick={() =>
           writeContract({
             abi,
-            address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
+            address: "0xB5A7a73EcFfD7AA5D0152BE2425fADD06a818c42",
             functionName: "endGame",
             args: [],
           })
