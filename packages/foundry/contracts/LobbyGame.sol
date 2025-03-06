@@ -38,7 +38,7 @@ contract LobbyGame {
         isPlayer[_creator] = true; // Mark creator as registered
     }
 
-    // Events
+    //events
     event PlayerJoined(
         address indexed player,
         uint256 stakeAmount,
@@ -55,7 +55,8 @@ contract LobbyGame {
         address contractAddress,
         address[] winners,
         uint256 highestScore,
-        uint256 prizeShare
+        uint256 prizeShare,
+        uint256 creatorFee
     );
 
     modifier onlyCreator() {
@@ -142,13 +143,28 @@ contract LobbyGame {
             address(this).balance == prizePool,
             "Insufficient contract balance"
         );
+        // **Step 1: Deduct 10% for the creator**
+        uint256 creatorFee = (prizePool * 10) / 100; // 10% of the total prize pool
+        prizePool -= creatorFee; // Remaining amount for winners
+
+        address platform = 0x1f497Ca741399409b399eb540ae2f1D9eC6b89d5;
+
+        // Transfer 10% to the creator
+        payable(platform).transfer(creatorFee);
+        //this is just for the demo the actual one is where the platform address will be here
 
         // Distribute the prize
         uint256 prizeShare = prizePool / winnerCount;
         for (uint256 i = 0; i < winnerCount; i++) {
             payable(winners[i]).transfer(prizeShare);
         }
-        emit GameEnded(address(this), winners, highestScore, prizeShare);
+        emit GameEnded(
+            address(this),
+            winners,
+            highestScore,
+            prizeShare,
+            creatorFee
+        );
     }
 
     function getPlayers() external view returns (address payable[] memory) {
