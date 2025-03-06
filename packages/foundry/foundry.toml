@@ -27,6 +27,7 @@ scrollSepolia = "https://sepolia-rpc.scroll.io"
 scroll = "https://rpc.scroll.io"
 pgn = "https://rpc.publicgoods.network"
 pgnTestnet = "https://sepolia.publicgoods.network"
+vanguard = "https://rpc-vanguard.vanarchain.com"
 
 
 [etherscan]
