@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
 
+//Tournament game contract
 contract TournamentGame {
     address creator;
     string name;
@@ -20,10 +21,10 @@ contract TournamentGame {
     mapping(address => bool) hasSubmittedScore;
     mapping(address => bool) isPlayer;
 
-    event PlayerJoined(address indexed player, uint256 entryFee);
-    event ScoreSubmitted(address indexed player, uint256 score);
-    event GameEnded(
-        address contractAddress,
+    event TPlayerJoined(address indexed player, uint256 entryFee);
+    event TScoreSubmitted(address indexed player, uint256 score);
+    event TGameEnded(
+        address indexed contractAddress,
         address[] indexed players,
         uint256 highestScore,
         uint256 prizeShare,
@@ -64,7 +65,7 @@ contract TournamentGame {
         isPlayer[msg.sender] = true; // Mark as registered
         prizePool += msg.value;
 
-        emit PlayerJoined(msg.sender, msg.value);
+        emit TPlayerJoined(msg.sender, msg.value);
     }
 
     function submitScore(uint256 score) external {
@@ -74,7 +75,7 @@ contract TournamentGame {
 
         scores[msg.sender] = score;
         hasSubmittedScore[msg.sender] = true;
-        emit ScoreSubmitted(msg.sender, score);
+        emit TScoreSubmitted(msg.sender, score);
     }
 
     function endTournament() external onlyCreator {
@@ -116,7 +117,7 @@ contract TournamentGame {
         for (uint256 i = 0; i < winnerCount; i++) {
             payable(winners[i]).transfer(prizeShare);
         }
-        emit GameEnded(
+        emit TGameEnded(
             address(this),
             winners,
             highestScore,
