@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import abi from "../../snake-graph-scroll/abis/SnakeFactory.json";
 import { Switch } from "@radix-ui/react-switch";
+import { log } from "console";
 import { Copy, Plus } from "lucide-react";
+import { formatUnits, parseEther } from "viem";
+import { useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
 import {
   Dialog,
   DialogContent,
@@ -15,8 +20,15 @@ import {
 } from "~~/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~~/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
+import {
+  useScaffoldReadContract,
+  useScaffoldWatchContractEvent,
+  useScaffoldWriteContract,
+  useTransactor,
+} from "~~/hooks/scaffold-eth";
 
 export function CreateLobbyModal() {
+  const { address: connectedAddress } = useAccount();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [lobbyName, setLobbyName] = useState("");
@@ -27,6 +39,9 @@ export function CreateLobbyModal() {
   const [lobbyCode, setLobbyCode] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isCreated, setIsCreated] = useState(false);
+  const [duration, setDuration] = useState("300");
+
+  const [newGameAddress, setNewGameAddress] = useState("");
 
   const generateLobbyCode = () => {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -37,34 +52,54 @@ export function CreateLobbyModal() {
     return result;
   };
 
-  const handleCreateLobby = () => {
-    setIsCreating(true);
-
-    // Generate a lobby code if it's a private lobby
-    if (isPrivate && !lobbyCode) {
-      setLobbyCode(generateLobbyCode());
-    }
-
-    // Simulate blockchain transaction delay
-    setTimeout(() => {
-      setIsCreating(false);
-      setIsCreated(true);
-
-      // Redirect after showing success message
-      setTimeout(() => {
-        setOpen(false);
-        setIsCreated(false);
-
-        // Create a URL-friendly lobby ID
-        const lobbyId = lobbyName.toLowerCase().replace(/\s+/g, "-");
-        router.push(`/game/${lobbyId}`);
-      }, 2000);
-    }, 2000);
-  };
-
   const copyLobbyCode = () => {
     navigator.clipboard.writeText(lobbyCode);
   };
+
+  const { writeContractAsync, isPending } = useWriteContract();
+
+  const writeTx = useTransactor();
+
+  const writeContractAsyncCreateLobby = () =>
+    writeContractAsync({
+      abi: abi,
+      address: "0x483AD3a415515Be81e558A8c58c9475aFAe97747",
+      functionName: "createGame",
+      args: [lobbyName, parseEther(stakeAmount), parseInt(maxPlayers), BigInt(parseInt(duration))],
+      value: parseEther(stakeAmount),
+    });
+
+  const handleCreateLobby = async () => {
+    try {
+      await writeTx(writeContractAsyncCreateLobby);
+    } catch (error) {
+      console.log("Unexpected error in writeTx", error);
+    }
+  };
+
+  useScaffoldWatchContractEvent({
+    contractName: "SnakeFactory",
+    eventName: "GameCreated",
+    onLogs: logs => {
+      logs.map(log => {
+        const { gameAddress, creator } = log.args;
+        if (creator === connectedAddress) {
+          setNewGameAddress(gameAddress as string);
+        }
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (newGameAddress) {
+      setIsCreating(false);
+      setIsCreated(true);
+      setLobbyCode(generateLobbyCode());
+      setTimeout(() => {
+        router.push(`/game/${newGameAddress}`);
+      }, 3000);
+    }
+  }, [newGameAddress, router]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -175,6 +210,29 @@ export function CreateLobbyModal() {
                   <SelectItem value="6">8 Players</SelectItem>
                   <SelectItem value="6">9 Players</SelectItem>
                   <SelectItem value="6">10 Players</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="max-players" className="text-right text-sm">
+                Duration
+              </label>
+              <Select value={duration} onValueChange={setDuration}>
+                <SelectTrigger className="col-span-3 bg-gray-800 border-gray-700">
+                  <SelectValue placeholder="Select max players" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                  <SelectItem value="60">1 Minute</SelectItem>
+                  <SelectItem value="120">2 Minutes</SelectItem>
+                  <SelectItem value="180">3 Minutes</SelectItem>
+                  <SelectItem value="240">4 Minutes</SelectItem>
+                  <SelectItem value="300">5 Minutes</SelectItem>
+                  <SelectItem value="360">6 Minutes</SelectItem>
+                  <SelectItem value="420">7 Minutes</SelectItem>
+                  <SelectItem value="480">8 Minutes</SelectItem>
+                  <SelectItem value="540">9 Minutes</SelectItem>
+                  <SelectItem value="600">10 Minutes</SelectItem>
                 </SelectContent>
               </Select>
             </div>

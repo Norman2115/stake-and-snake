@@ -40,6 +40,7 @@ const Lobbies: NextPage = () => {
     client
       .query({ query: gameQuery })
       .then(({ data }) => {
+        setGames(data.gameCreateds);
         console.log("Scroll subgraph lobby data: ", data);
       })
       .catch(err => {

@@ -11,6 +11,13 @@ export default function GameCanvas({ gameStarted, onGameOver }: GameCanvasProps)
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [gameResetTrigger, setGameResetTrigger] = useState(0);
+
+  const resetGame = () => {
+    setScore(0);
+    setGameOver(false);
+    setGameResetTrigger(prev => prev + 1); // Change the trigger to restart the game
+  };
 
   useEffect(() => {
     if (!gameStarted || !canvasRef.current) return;
@@ -238,7 +245,7 @@ export default function GameCanvas({ gameStarted, onGameOver }: GameCanvasProps)
       window.removeEventListener("resize", updateCanvasSize);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [gameStarted, gameOver, onGameOver]);
+  }, [gameStarted, gameOver, onGameOver, gameResetTrigger]);
 
   return (
     <div className="relative h-full w-full">
@@ -248,12 +255,14 @@ export default function GameCanvas({ gameStarted, onGameOver }: GameCanvasProps)
           <div className="rounded-lg bg-gray-800 p-6 text-center">
             <h2 className="mb-2 text-2xl font-bold text-red-500">Game Over!</h2>
             <p className="mb-4 text-xl">Your score: {score}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="rounded-md bg-green-500 px-4 py-2 font-medium text-white hover:bg-green-600"
-            >
-              Play Again
-            </button>
+            <div className="flex justify-center gap-2">
+              <button
+                onClick={resetGame}
+                className="rounded-md bg-green-500 px-4 py-2 font-medium text-white hover:bg-green-600"
+              >
+                Play Again
+              </button>
+            </div>
           </div>
         </div>
       )}
