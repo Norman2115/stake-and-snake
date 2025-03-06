@@ -1,4 +1,4 @@
-type GameCreated @entity(immutable: true) {
+type GameCreated @entity {
   id: Bytes!
   gameAddress: Bytes! # address
   creator: Bytes! # address
@@ -9,6 +9,9 @@ type GameCreated @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  started: Boolean! # bool
+  ended: Boolean! # bool
+  numOfPlayers: Int! # uint8
 }
 
 type TournamentCreated @entity(immutable: true) {
@@ -19,6 +22,89 @@ type TournamentCreated @entity(immutable: true) {
   entryFee: BigInt! # uint256
   maxPlayers: BigInt! # uint256
   isWeekly: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type GameEnded @entity(immutable: true) {
+  id: Bytes!
+  contractAddress: Bytes! # address
+  winners: [Bytes!]! # address[]
+  highestScore: BigInt! # uint256
+  prizeShare: BigInt! # uint256
+  creatorFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type GameStarted @entity(immutable: true) {
+  id: Bytes!
+  contractAddress: Bytes! # address
+  startTime: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PlayerJoined @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  contractAddress: Bytes! # address
+  stakeAmount: BigInt! # uint256
+  newPrizePool: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PlayerQuit @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  contractAddress: Bytes! # address
+  refundAmount: BigInt! # uint256
+  newPrizePool: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ScoreSubmitted @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  contractAddress: Bytes! # address
+  score: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type TGameEnded @entity(immutable: true) {
+  id: Bytes!
+  contractAddress: Bytes! # address
+  players: [Bytes!]! # address[]
+  highestScore: BigInt! # uint256
+  prizeShare: BigInt! # uint256
+  creatorFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TPlayerJoined @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  contractAddress: Bytes! # address
+  entryFee: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TScoreSubmitted @entity(immutable: true) {
+  id: Bytes!
+  player: Bytes! # address
+  contractAddress: Bytes! # address
+  score: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

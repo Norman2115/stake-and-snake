@@ -21,8 +21,16 @@ contract TournamentGame {
     mapping(address => bool) hasSubmittedScore;
     mapping(address => bool) isPlayer;
 
-    event TPlayerJoined(address indexed player, uint256 entryFee);
-    event TScoreSubmitted(address indexed player, uint256 score);
+    event TPlayerJoined(
+        address indexed player,
+        address indexed contractAddress,
+        uint256 entryFee
+    );
+    event TScoreSubmitted(
+        address indexed player,
+        address indexed contractAddress,
+        uint256 score
+    );
     event TGameEnded(
         address indexed contractAddress,
         address[] indexed players,
@@ -65,7 +73,7 @@ contract TournamentGame {
         isPlayer[msg.sender] = true; // Mark as registered
         prizePool += msg.value;
 
-        emit TPlayerJoined(msg.sender, msg.value);
+        emit TPlayerJoined(msg.sender, address(this), msg.value);
     }
 
     function submitScore(uint256 score) external {
@@ -75,7 +83,7 @@ contract TournamentGame {
 
         scores[msg.sender] = score;
         hasSubmittedScore[msg.sender] = true;
-        emit TScoreSubmitted(msg.sender, score);
+        emit TScoreSubmitted(msg.sender, address(this), score);
     }
 
     function endTournament() external onlyCreator {

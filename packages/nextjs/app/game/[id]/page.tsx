@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import abi from "../../../../snake-graph-scroll/abis/LobbyGame.json";
+import abi from "../../../../snake-subgraph-scroll/abis/LobbyGame.json";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Crown, Hand, Settings, Users } from "lucide-react";
 import { formatUnits, parseEther } from "viem";
@@ -12,7 +12,7 @@ import GameCanvas from "~~/components/game-canvas";
 import PlayerList from "~~/components/player-list";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
 
 export default function GamePage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -29,58 +29,79 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const [winnerData, setWinnerData] = useState<any>(null);
   const [isGameEnded, setIsGameEnded] = useState(false);
 
-  const gameQuery = gql`
-    query {
-      gameCreated(id: "${id}") {
-        gameAddress
-        maxPlayers
-        name
-        stakeAmount
-        duration
-        creator
-        started
-        ended
-      }
-    }
-  `;
-
-  const winnerQuery = gql`
-    query {
-      gameEndeds(where: {contractAddress: "${id}"}) {
-        id
-        winners
-        highestScore
-        prizeShare
-      }
-    }
-  `;
-
   const client = new ApolloClient({
     uri: APIURL,
     cache: new InMemoryCache(),
   });
 
-  useEffect(() => {
+  const fetchGameData = () => {
+    const gameQuery = gql`
+      query {
+        gameCreated(id: "${id}") {
+          gameAddress
+          maxPlayers
+          name
+          stakeAmount
+          duration
+          creator
+          started
+          ended
+          numOfPlayers
+        }
+      }
+    `;
     client
       .query({ query: gameQuery })
       .then(({ data }) => {
         console.log("Scroll subgraph lobby data: ", data);
         setGame(data.gameCreated);
-        console.log(data.gameCreated.stakeAmount);
-        setGameStarted(data.gameCreated.started);
         setTimeLeft(data.gameCreated.duration);
         setPotAmount(
           parseFloat(
             (parseFloat(data.gameCreated.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
               maximumFractionDigits: 5,
             }),
-          ) * data.gameCreated.maxPlayers,
+          ) * data.gameCreated.numOfPlayers,
         );
       })
       .catch(err => {
         console.log("Error fetching data: ", err);
       });
-  }, [gameQuery]);
+  };
+
+  const fetchWinnerData = () => {
+    const winnerQuery = gql`
+      query {
+        gameEndeds(where: {contractAddress: "${id}"}) {
+          id
+          winners
+          highestScore
+          prizeShare
+        }
+      }
+    `;
+    client
+      .query({ query: winnerQuery })
+      .then(({ data }) => {
+        console.log("Winner data: ", data);
+        setWinnerData(data.gameEndeds[0]);
+      })
+      .catch(err => {
+        console.log("Error fetching winner data: ", err);
+      });
+  };
+
+  useEffect(() => {
+    if (isGameEnded) {
+      fetchWinnerData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGameEnded]);
+
+  useEffect(() => {
+    fetchGameData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (gameStarted && timeLeft > 0) {
@@ -154,23 +175,6 @@ export default function GamePage({ params }: { params: { id: string } }) {
       setHighestScore(score);
     }
   };
-
-  useEffect(() => {
-    if (isGameEnded) {
-      const fetchWinnerData = setTimeout(() => {
-        client
-          .query({ query: winnerQuery })
-          .then(({ data }) => {
-            console.log("Winner data: ", data);
-            setWinnerData(data.gameEndeds[0]);
-          })
-          .catch(err => {
-            console.log("Error fetching winner data: ", err);
-          });
-      }, 500);
-      return () => clearTimeout(fetchWinnerData);
-    }
-  }, [isGameEnded]);
 
   const handleLeaveGame = () => {
     router.push(`/lobbies`);

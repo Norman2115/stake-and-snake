@@ -41,16 +41,22 @@ contract LobbyGame {
     //events
     event PlayerJoined(
         address indexed player,
+        address indexed contractAddress,
         uint256 stakeAmount,
         uint256 newPrizePool
     );
     event PlayerQuit(
         address indexed player,
+        address indexed contractAddress,
         uint256 refundAmount,
         uint256 newPrizePool
     );
     event GameStarted(address contractAddress, uint256 startTime);
-    event ScoreSubmitted(address indexed player, uint256 score);
+    event ScoreSubmitted(
+        address indexed player,
+        address indexed contractAddress,
+        uint256 score
+    );
     event GameEnded(
         address contractAddress,
         address[] winners,
@@ -76,7 +82,7 @@ contract LobbyGame {
         isPlayer[msg.sender] = true; // Mark as registered
         prizePool += msg.value;
 
-        emit PlayerJoined(msg.sender, msg.value, prizePool);
+        emit PlayerJoined(msg.sender, address(this), msg.value, prizePool);
     }
 
     function startGame() external onlyCreator {
@@ -103,7 +109,7 @@ contract LobbyGame {
         }
         isPlayer[msg.sender] = false; // Mark as unregistered
         prizePool -= refundAmount;
-        emit PlayerQuit(msg.sender, refundAmount, prizePool);
+        emit PlayerQuit(msg.sender, address(this), refundAmount, prizePool);
     }
 
     function submitScore(uint256 score) external {
@@ -113,7 +119,7 @@ contract LobbyGame {
 
         scores[msg.sender] = score;
         hasSubmittedScore[msg.sender] = true;
-        emit ScoreSubmitted(msg.sender, score);
+        emit ScoreSubmitted(msg.sender, address(this), score);
     }
 
     function endGame() external {

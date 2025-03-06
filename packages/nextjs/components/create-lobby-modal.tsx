@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import abi from "../../snake-graph-scroll/abis/SnakeFactory.json";
+import abi from "../../snake-subgraph-scroll/abis/SnakeFactory.json";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { Switch } from "@radix-ui/react-switch";
 import { log } from "console";
@@ -28,7 +28,7 @@ import {
   useTransactor,
 } from "~~/hooks/scaffold-eth";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-graph-scroll/version/latest";
+const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
 
 export function CreateLobbyModal() {
   const { address: connectedAddress } = useAccount();
@@ -83,12 +83,12 @@ export function CreateLobbyModal() {
       });
   };
 
+  // Fetch new game data when a new game is created and the user is connected
   useEffect(() => {
-    if (isCreated) {
-      setTimeout(() => {
-        fetchNewGameData();
-      }, 500);
+    if (isCreated && connectedAddress) {
+      fetchNewGameData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCreated, connectedAddress]);
 
   const generateLobbyCode = () => {
@@ -111,12 +111,13 @@ export function CreateLobbyModal() {
   const writeContractAsyncCreateLobby = () =>
     writeContractAsync({
       abi: abi,
-      address: "0x483AD3a415515Be81e558A8c58c9475aFAe97747",
+      address: "0xcfd39e4B83dCB7bb831eFcfE8d428EdA25D008AB",
       functionName: "createGame",
       args: [lobbyName, parseEther(stakeAmount), parseInt(maxPlayers), BigInt(parseInt(duration))],
       value: parseEther(stakeAmount),
     });
 
+  // Create a new lobby
   const handleCreateLobby = async () => {
     try {
       setIsCreating(true);
