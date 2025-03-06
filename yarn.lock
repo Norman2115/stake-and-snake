@@ -15736,6 +15736,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"snake-subgraph-scroll@workspace:packages/snake-subgraph-scroll":
+  version: 0.0.0-use.local
+  resolution: "snake-subgraph-scroll@workspace:packages/snake-subgraph-scroll"
+  dependencies:
+    "@graphprotocol/graph-cli": 0.96.0
+    "@graphprotocol/graph-ts": 0.37.0
+    matchstick-as: 0.6.0
+  languageName: unknown
+  linkType: soft
+
 "socket.io-client@npm:^4.5.1":
   version: 4.8.1
   resolution: "socket.io-client@npm:4.8.1"

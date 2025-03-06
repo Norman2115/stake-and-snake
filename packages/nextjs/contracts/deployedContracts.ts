@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   534351: {
     SnakeFactory: {
-      address: "0x483ad3a415515be81e558a8c58c9475afae97747",
+      address: "0x126e774ea7901c22bc9b679c2c3e2b231d255dba",
       abi: [
         {
           type: "function",
@@ -39,6 +39,44 @@ const deployedContracts = {
         },
         {
           type: "function",
+          name: "createTournamentGame",
+          inputs: [
+            {
+              name: "_creator",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_name",
+              type: "string",
+              internalType: "string",
+            },
+            {
+              name: "_duration",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_entryFee",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_maxPlayers",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_isWeekly",
+              type: "bool",
+              internalType: "bool",
+            },
+          ],
+          outputs: [],
+          stateMutability: "nonpayable",
+        },
+        {
+          type: "function",
           name: "deployedGames",
           inputs: [
             {
@@ -52,6 +90,51 @@ const deployedContracts = {
               name: "",
               type: "address",
               internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "deployedTournament",
+          inputs: [
+            {
+              name: "",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+          outputs: [
+            {
+              name: "",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getDeployedGames",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address[]",
+              internalType: "address[]",
+            },
+          ],
+          stateMutability: "view",
+        },
+        {
+          type: "function",
+          name: "getDeployedTournament",
+          inputs: [],
+          outputs: [
+            {
+              name: "",
+              type: "address[]",
+              internalType: "address[]",
             },
           ],
           stateMutability: "view",
@@ -99,9 +182,52 @@ const deployedContracts = {
           ],
           anonymous: false,
         },
+        {
+          type: "event",
+          name: "TournamentCreated",
+          inputs: [
+            {
+              name: "tournamentAddress",
+              type: "address",
+              indexed: true,
+              internalType: "address",
+            },
+            {
+              name: "name",
+              type: "string",
+              indexed: false,
+              internalType: "string",
+            },
+            {
+              name: "duration",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "entryFee",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "maxPlayers",
+              type: "uint256",
+              indexed: false,
+              internalType: "uint256",
+            },
+            {
+              name: "isWeekly",
+              type: "bool",
+              indexed: false,
+              internalType: "bool",
+            },
+          ],
+          anonymous: false,
+        },
       ],
       inheritedFunctions: {},
-      deploymentFile: "run-1741166448.json",
+      deploymentFile: "run-1741273190.json",
       deploymentScript: "Deploy.s.sol",
     },
   },
