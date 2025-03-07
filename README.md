@@ -124,6 +124,8 @@ cargo run -p graph-node --release -- \
 * Yield Farming
   *  Yield farming protocols could provide an additional revenue stream during week-long tournaments.
   *  The platform can generate extra income.
+ 
+If only we had more time. The hackathon took place alongside our course assignments, but we’re still happy with what we achieved within the time limit.
 
 ## Special Thanks
 We was a total newbie when it came to The Graph, and huge thanks to **Soh Zhe Hong** a.k.a **HH** for the week-long mentorship. It was brain stuck and overwhelming at first but after successfully writing relationships between data tables, it all started to make sense.
