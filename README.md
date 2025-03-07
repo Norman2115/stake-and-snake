@@ -81,11 +81,13 @@ cargo run -p graph-node --release -- \
 
 ### Register for Tournaments
 
-
+![Image](https://github.com/user-attachments/assets/687438ca-70a0-4276-a59e-31f3feb3f6dc)
 
 ---
 
 ### Fight for Podium
+
+![Image](https://github.com/user-attachments/assets/4b088aae-3a0b-406d-8767-56350450b442)
 
 ---
 
