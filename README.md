@@ -77,17 +77,19 @@ cargo run -p graph-node --release -- \
 
 ### Compete with Others
 
+![Image](https://github.com/user-attachments/assets/a35268dd-c328-4ed9-a1cd-4eb23e33415c)
+
 ---
 
 ### Register for Tournaments
 
-![Image](https://github.com/user-attachments/assets/687438ca-70a0-4276-a59e-31f3feb3f6dc)
+![Image](https://github.com/user-attachments/assets/a414aebe-0804-4c0c-a275-217c0ef6109f)
 
 ---
 
 ### Fight for Podium
 
-![Image](https://github.com/user-attachments/assets/4b088aae-3a0b-406d-8767-56350450b442)
+![Image](https://github.com/user-attachments/assets/8ebbdeae-bb0b-4267-a90b-4154993f3096)
 
 ---
 
