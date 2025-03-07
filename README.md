@@ -69,6 +69,24 @@ cargo run -p graph-node --release -- \
 
 ![Image](https://github.com/user-attachments/assets/ac053550-7020-48f6-b9a5-0006e2fdc022)
 
+![Image](https://github.com/user-attachments/assets/16fd76c9-d803-4cfd-b58c-d939b4d7a170)
+
+![Image](https://github.com/user-attachments/assets/99fdbcd3-dc37-4def-9f73-a032c13ae746)
+
+---
+
+### Compete with Others
+
+---
+
+### Register for Tournaments
+
+
+
+---
+
+### Fight for Podium
+
 ---
 
 ## Things to Add
