@@ -18,6 +18,8 @@ If you're looking for features and pages, [here](https://github.com/Norman2115/s
 The game is a prototype. If you spot any mathematical miscalculations... Just pretend it’s abstract art and move on.
 
 ## Scroll (Scroll Sepolia)
+Our game Stake & Snake leverages Scroll’s zkEVM to provide a low-cost, and scalable gaming experience. Scroll balances the trilemma by scaling Ethereum’s throughput and scalability while preserving its decentralization and security. This makes it very suitable for high demand applications like Web 3 Gaming.
+
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C](https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C)
