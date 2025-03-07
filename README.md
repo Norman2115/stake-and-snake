@@ -21,6 +21,7 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 * [Here](packages/snake-subgraph-scroll/) is the repository for the subgraph indexing the Scroll Sepolia network.
 * [Here](packages/snake-graph-vanar/) is the repository for the subgraph indexing the Vanguard network.
 * TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
+* For the frontend subgraph integration, we use Apollo Client to fetch data from the subgraph. [Here](packages/nextjs/app/lobbies/page.tsx#L16-L77) is an example.
 
 Unfortunately, we couldn't provide the endpoint for the Vanguard subgraph as it is running on our local Graph Node. However, here are some screenshots.
 
