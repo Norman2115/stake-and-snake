@@ -12,7 +12,8 @@ export function createGameEndedEvent(
   contractAddress: Address,
   winners: Array<Address>,
   highestScore: BigInt,
-  prizeShare: BigInt
+  prizeShare: BigInt,
+  creatorFee: BigInt
 ): GameEnded {
   let gameEndedEvent = changetype<GameEnded>(newMockEvent())
 
@@ -37,6 +38,12 @@ export function createGameEndedEvent(
     new ethereum.EventParam(
       "prizeShare",
       ethereum.Value.fromUnsignedBigInt(prizeShare)
+    )
+  )
+  gameEndedEvent.parameters.push(
+    new ethereum.EventParam(
+      "creatorFee",
+      ethereum.Value.fromUnsignedBigInt(creatorFee)
     )
   )
 
@@ -69,6 +76,7 @@ export function createGameStartedEvent(
 
 export function createPlayerJoinedEvent(
   player: Address,
+  contractAddress: Address,
   stakeAmount: BigInt,
   newPrizePool: BigInt
 ): PlayerJoined {
@@ -78,6 +86,12 @@ export function createPlayerJoinedEvent(
 
   playerJoinedEvent.parameters.push(
     new ethereum.EventParam("player", ethereum.Value.fromAddress(player))
+  )
+  playerJoinedEvent.parameters.push(
+    new ethereum.EventParam(
+      "contractAddress",
+      ethereum.Value.fromAddress(contractAddress)
+    )
   )
   playerJoinedEvent.parameters.push(
     new ethereum.EventParam(
@@ -97,6 +111,7 @@ export function createPlayerJoinedEvent(
 
 export function createPlayerQuitEvent(
   player: Address,
+  contractAddress: Address,
   refundAmount: BigInt,
   newPrizePool: BigInt
 ): PlayerQuit {
@@ -106,6 +121,12 @@ export function createPlayerQuitEvent(
 
   playerQuitEvent.parameters.push(
     new ethereum.EventParam("player", ethereum.Value.fromAddress(player))
+  )
+  playerQuitEvent.parameters.push(
+    new ethereum.EventParam(
+      "contractAddress",
+      ethereum.Value.fromAddress(contractAddress)
+    )
   )
   playerQuitEvent.parameters.push(
     new ethereum.EventParam(
@@ -125,6 +146,7 @@ export function createPlayerQuitEvent(
 
 export function createScoreSubmittedEvent(
   player: Address,
+  contractAddress: Address,
   score: BigInt
 ): ScoreSubmitted {
   let scoreSubmittedEvent = changetype<ScoreSubmitted>(newMockEvent())
@@ -133,6 +155,12 @@ export function createScoreSubmittedEvent(
 
   scoreSubmittedEvent.parameters.push(
     new ethereum.EventParam("player", ethereum.Value.fromAddress(player))
+  )
+  scoreSubmittedEvent.parameters.push(
+    new ethereum.EventParam(
+      "contractAddress",
+      ethereum.Value.fromAddress(contractAddress)
+    )
   )
   scoreSubmittedEvent.parameters.push(
     new ethereum.EventParam("score", ethereum.Value.fromUnsignedBigInt(score))

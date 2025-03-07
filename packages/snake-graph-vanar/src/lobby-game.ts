@@ -6,14 +6,16 @@ import {
   ScoreSubmitted as ScoreSubmittedEvent,
 } from "../generated/LobbyGame/LobbyGame";
 import {
+  Game,
   GameCreated,
   GameEnded,
   GameStarted,
   PlayerJoined,
   PlayerQuit,
+  PlayerScore,
   ScoreSubmitted,
 } from "../generated/schema";
-import { Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export function handleGameEnded(event: GameEndedEvent): void {
   let entity = new GameEnded(
@@ -23,13 +25,20 @@ export function handleGameEnded(event: GameEndedEvent): void {
   entity.winners = changetype<Bytes[]>(event.params.winners);
   entity.highestScore = event.params.highestScore;
   entity.prizeShare = event.params.prizeShare;
+  entity.creatorFee = event.params.creatorFee;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
-  let game = GameCreated.load(event.params.contractAddress);
-  if (game != null) {
+  let gameCreated = GameCreated.load(event.params.contractAddress);
+  if (gameCreated !== null) {
+    gameCreated.ended = true;
+    gameCreated.save();
+  }
+
+  let game = Game.load(event.params.contractAddress);
+  if (game !== null) {
     game.ended = true;
     game.save();
   }
@@ -48,8 +57,14 @@ export function handleGameStarted(event: GameStartedEvent): void {
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
-  let game = GameCreated.load(event.params.contractAddress);
-  if (game != null) {
+  let gameCreated = GameCreated.load(event.params.contractAddress);
+  if (gameCreated !== null) {
+    gameCreated.started = true;
+    gameCreated.save();
+  }
+
+  let game = Game.load(event.params.contractAddress);
+  if (game !== null) {
     game.started = true;
     game.save();
   }
@@ -62,12 +77,36 @@ export function handlePlayerJoined(event: PlayerJoinedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.player = event.params.player;
+  entity.contractAddress = event.params.contractAddress;
   entity.stakeAmount = event.params.stakeAmount;
   entity.newPrizePool = event.params.newPrizePool;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+
+  let gameCreated = GameCreated.load(event.params.contractAddress);
+  if (gameCreated !== null) {
+    gameCreated.numOfPlayers = gameCreated.numOfPlayers + 1;
+    gameCreated.save();
+  }
+
+  let game = Game.load(event.params.contractAddress);
+  if (game !== null) {
+    game.numOfPlayers = game.numOfPlayers + 1;
+    game.playerAddresses = game.playerAddresses.concat([event.params.player]);
+    game.save();
+  }
+
+  let playerScore = PlayerScore.load(event.params.player);
+  if (playerScore === null) {
+    playerScore = new PlayerScore(event.params.player);
+    playerScore.player = event.params.player;
+    playerScore.score = BigInt.fromI32(0);
+    playerScore.game = event.params.contractAddress;
+    playerScore.quitted = false;
+    playerScore.save();
+  }
 
   entity.save();
 }
@@ -77,12 +116,39 @@ export function handlePlayerQuit(event: PlayerQuitEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.player = event.params.player;
+  entity.contractAddress = event.params.contractAddress;
   entity.refundAmount = event.params.refundAmount;
   entity.newPrizePool = event.params.newPrizePool;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+
+  let gameCreated = GameCreated.load(event.params.contractAddress);
+  if (gameCreated !== null) {
+    gameCreated.numOfPlayers = gameCreated.numOfPlayers - 1;
+    gameCreated.save();
+  }
+
+  let game = Game.load(event.params.contractAddress);
+  if (game !== null) {
+    game.numOfPlayers = game.numOfPlayers - 1;
+    let updatedPlayerAddresses: Bytes[] = [];
+    for (let i = 0; i < game.playerAddresses.length; i++) {
+      if (game.playerAddresses[i] != event.params.player) {
+        updatedPlayerAddresses.push(game.playerAddresses[i]);
+      }
+    }
+
+    game.playerAddresses = updatedPlayerAddresses;
+    game.save();
+  }
+
+  let playerScore = PlayerScore.load(event.params.player);
+  if (playerScore !== null) {
+    playerScore.quitted = true;
+    playerScore.save();
+  }
 
   entity.save();
 }
@@ -92,11 +158,18 @@ export function handleScoreSubmitted(event: ScoreSubmittedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
   entity.player = event.params.player;
+  entity.contractAddress = event.params.contractAddress;
   entity.score = event.params.score;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
+
+  let playerScore = PlayerScore.load(event.params.player);
+  if (playerScore !== null) {
+    playerScore.score = event.params.score;
+    playerScore.save();
+  }
 
   entity.save();
 }

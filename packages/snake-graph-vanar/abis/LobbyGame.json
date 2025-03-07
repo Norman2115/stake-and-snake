@@ -36,6 +36,12 @@
         "internalType": "uint256",
         "name": "prizeShare",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "creatorFee",
+        "type": "uint256"
       }
     ],
     "name": "GameEnded",
@@ -70,6 +76,12 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "stakeAmount",
@@ -95,6 +107,12 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractAddress",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "refundAmount",
@@ -117,6 +135,12 @@
         "indexed": true,
         "internalType": "address",
         "name": "player",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "contractAddress",
         "type": "address"
       },
       {

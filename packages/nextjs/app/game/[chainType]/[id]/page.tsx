@@ -2,23 +2,34 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import abi from "../../../../snake-subgraph-scroll/abis/LobbyGame.json";
+import { useParams, useRouter } from "next/navigation";
+import abi from "../../../../../snake-subgraph-scroll/abis/LobbyGame.json";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ArrowLeft, Crown, Hand, Settings, Users } from "lucide-react";
 import { formatUnits, parseEther } from "viem";
-import { useReadContract, useWatchContractEvent, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWatchContractEvent, useWriteContract } from "wagmi";
 import GameCanvas from "~~/components/game-canvas";
 import PlayerList from "~~/components/player-list";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
+const SCROLL_API_URL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
+const VANAR_API_URL = "http://127.0.0.1:9191/subgraphs/name/snake-subgraph-vanar";
 
-export default function GamePage({ params }: { params: { id: string } }) {
+export default function GamePage() {
   const router = useRouter();
-  const { id } = params;
+  const { id, chainType } = useParams();
+  const { chainId } = useAccount();
 
-  const [game, setGame] = useState<any>(null); // State to store fetched game data
+  const scrollClient = new ApolloClient({
+    uri: SCROLL_API_URL,
+    cache: new InMemoryCache(),
+  });
+
+  const vanarClient = new ApolloClient({
+    uri: VANAR_API_URL,
+    cache: new InMemoryCache(),
+  });
+
   const [gameStarted, setGameStarted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0); // 3 minutes in seconds
   const [potAmount, setPotAmount] = useState(0);
@@ -29,10 +40,8 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const [winnerData, setWinnerData] = useState<any>(null);
   const [isGameEnded, setIsGameEnded] = useState(false);
 
-  const client = new ApolloClient({
-    uri: APIURL,
-    cache: new InMemoryCache(),
-  });
+  const [scrollGames, setScrollGames] = useState<any>();
+  const [vanarGames, setVanarGames] = useState<any>();
 
   const fetchGameData = () => {
     const getLobbyGameById = gql`
@@ -50,11 +59,12 @@ export default function GamePage({ params }: { params: { id: string } }) {
         }
       }
     `;
-    client
-      .query({ query: getLobbyGameById })
-      .then(({ data }) => {
+
+    const fetchScrollGames = async () => {
+      try {
+        const { data } = await scrollClient.query({ query: getLobbyGameById });
         console.log("Scroll subgraph lobby data: ", data);
-        setGame(data.game);
+        setScrollGames(data.game);
         setTimeLeft(data.game.duration);
         setPotAmount(
           parseFloat(
@@ -63,10 +73,34 @@ export default function GamePage({ params }: { params: { id: string } }) {
             }),
           ) * data.game.numOfPlayers,
         );
-      })
-      .catch(err => {
-        console.log("Error fetching data: ", err);
-      });
+      } catch (err) {
+        console.log("Error fetching Scroll data: ", err);
+      }
+    };
+
+    const fetchVanarGames = async () => {
+      try {
+        const { data } = await vanarClient.query({ query: getLobbyGameById });
+        console.log("Vanar subgraph lobby data: ", data);
+        setVanarGames(data.game);
+        setTimeLeft(data.game.duration);
+        setPotAmount(
+          parseFloat(
+            (parseFloat(data.game.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+              maximumFractionDigits: 5,
+            }),
+          ) * data.game.numOfPlayers,
+        );
+      } catch (err) {
+        console.log("Error fetching Vanar data: ", err);
+      }
+    };
+
+    if (chainType === "scroll") {
+      fetchScrollGames();
+    } else {
+      fetchVanarGames();
+    }
   };
 
   const fetchWinnerData = () => {
@@ -80,15 +114,32 @@ export default function GamePage({ params }: { params: { id: string } }) {
         }
       }
     `;
-    client
-      .query({ query: getGameWinners })
-      .then(({ data }) => {
+
+    const fetchScrollWinnerData = async () => {
+      try {
+        const { data } = await scrollClient.query({ query: getGameWinners });
         console.log("Winner data: ", data);
         setWinnerData(data.gameEndeds[0]);
-      })
-      .catch(err => {
+      } catch (err) {
         console.log("Error fetching winner data: ", err);
-      });
+      }
+    };
+
+    const fetchVanarWinnerData = async () => {
+      try {
+        const { data } = await vanarClient.query({ query: getGameWinners });
+        console.log("Winner data: ", data);
+        setWinnerData(data.gameEndeds[0]);
+      } catch (err) {
+        console.log("Error fetching winner data: ", err);
+      }
+    };
+
+    if (chainType === "scroll") {
+      fetchScrollWinnerData();
+    } else {
+      fetchVanarWinnerData();
+    }
   };
 
   useEffect(() => {
@@ -122,7 +173,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const writeContractAsyncStartGame = () =>
     writeContractAsync({
       abi: abi,
-      address: game.address,
+      address: chainType === "scroll" ? scrollGames?.address : vanarGames?.address,
       functionName: "startGame",
     });
 
@@ -138,7 +189,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const writeContractAsyncEndGame = () =>
     writeContractAsync({
       abi: abi,
-      address: game.address,
+      address: chainType === "scroll" ? scrollGames?.address : vanarGames?.address,
       functionName: "endGame",
     });
 
@@ -154,7 +205,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
   const writeContractAsyncSubmitScore = () =>
     writeContractAsync({
       abi: abi,
-      address: game.address,
+      address: chainType === "scroll" ? scrollGames?.address : vanarGames?.address,
       functionName: "submitScore",
       args: [highestScore],
     });
@@ -184,6 +235,8 @@ export default function GamePage({ params }: { params: { id: string } }) {
     return `${address.slice(0, 6)}...${address.slice(-4)}`;
   };
 
+  const chainColor = chainType === "scroll" ? "bg-blue-500/20 text-blue-500" : "bg-purple-500/20 text-purple-500";
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-900 text-white">
       <main className="container mx-auto flex flex-1 flex-col px-4 py-6">
@@ -193,7 +246,7 @@ export default function GamePage({ params }: { params: { id: string } }) {
               <ArrowLeft className="h-5 w-5" />
             </button>
           </Link>
-          <h1 className="text-2xl font-bold">High Rollers Game</h1>
+          <h1 className="text-2xl font-bold">{chainType === "scroll" ? scrollGames?.name : vanarGames?.name}</h1>
         </div>
 
         <div className="grid flex-1 gap-6 md:grid-cols-[1fr_300px]">
@@ -218,19 +271,23 @@ export default function GamePage({ params }: { params: { id: string } }) {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-400">Stake:</span>
-                  <span>
+                  <span className={`font-medium rounded px-1.5 py-0.5 ${chainColor}`}>
                     {" "}
-                    {game?.stakeAmount
-                      ? (parseFloat(game.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+                    {chainType === "scroll"
+                      ? (parseFloat(scrollGames?.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
                           maximumFractionDigits: 5,
                         })
-                      : "Loading..."}{" "}
-                    ETH
+                      : (parseFloat(vanarGames?.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+                          maximumFractionDigits: 5,
+                        })}{" "}
+                    {chainType === "scroll" ? "ETH" : "VG"}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Total Pot:</span>
-                  <span className="text-green-500 font-medium">{potAmount} ETH</span>
+                  <span className={`font-medium rounded px-1.5 py-0.5 ${chainColor}`}>
+                    {potAmount} {chainType === "scroll" ? "ETH" : "VG"}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Game Mode:</span>
@@ -288,11 +345,14 @@ export default function GamePage({ params }: { params: { id: string } }) {
                       winnerData?.winners.map((winner: any) => (
                         <div key={winner} className="flex justify-between mb-3">
                           <div>{formatAddress(winner)}</div>
-                          <div>
-                            {(parseFloat(game.stakeAmount) / 10 ** 18).toLocaleString(undefined, {
+                          <div className={`font-medium rounded px-1.5 py-0.5 ${chainColor}`}>
+                            {(
+                              parseFloat(chainType === "scroll" ? scrollGames?.stakeAmount : vanarGames?.stakeAmount) /
+                              10 ** 18
+                            ).toLocaleString(undefined, {
                               maximumFractionDigits: 5,
                             })}{" "}
-                            ETH
+                            {chainType === "scroll" ? "ETH" : "VG"}
                           </div>
                         </div>
                       ))}

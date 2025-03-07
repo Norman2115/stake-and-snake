@@ -3,20 +3,31 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
+import { HttpLink } from "@apollo/client";
 import { ArrowLeft, Lock, Plus, Search, Users } from "lucide-react";
 import { NextPage } from "next";
+import { useAccount } from "wagmi";
+import { getChainId } from "wagmi/actions";
 import { CreateLobbyModal } from "~~/components/create-lobby-modal";
 import LobbyCard from "~~/components/lobby-card";
 import LobbyCardTest from "~~/components/lobby-card-test";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~~/components/ui/tabs";
 
-const APIURL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
+const SCROLL_API_URL = "https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest";
+const VANAR_API_URL = "http://127.0.0.1:9191/subgraphs/name/snake-subgraph-vanar";
 
 const Lobbies: NextPage = () => {
-  const [games, setGames] = useState<any[]>([]); // State to store fetched game data
+  const { address: connectedAddress, chainId } = useAccount();
+  const [scrollGames, setscrollGames] = useState<any[]>([]);
+  const [vanarGames, setVanarGames] = useState<any[]>([]);
 
-  const client = new ApolloClient({
-    uri: APIURL,
+  const scrollClient = new ApolloClient({
+    uri: SCROLL_API_URL,
+    cache: new InMemoryCache(),
+  });
+
+  const vanarClient = new ApolloClient({
+    uri: VANAR_API_URL,
     cache: new InMemoryCache(),
   });
 
@@ -33,19 +44,35 @@ const Lobbies: NextPage = () => {
           maxPlayers
           stakeAmount
           duration
+          playerAddresses
+          numOfPlayers
         }
       }
     `;
 
-    client
-      .query({ query: gameQuery })
-      .then(({ data }) => {
-        setGames(data.gameCreateds);
+    const fetchScrollGames = async () => {
+      try {
+        const { data } = await scrollClient.query({ query: gameQuery });
         console.log("Scroll subgraph lobby data: ", data);
-      })
-      .catch(err => {
-        console.log("Error fetching data: ", err);
-      });
+        setscrollGames(data.games);
+      } catch (err) {
+        console.log("Error fetching Scroll data: ", err);
+      }
+    };
+
+    const fetchVanarGames = async () => {
+      try {
+        const { data } = await vanarClient.query({ query: gameQuery });
+        console.log("Vanar subgraph lobby data: ", data);
+        setVanarGames(data.games);
+      } catch (err) {
+        console.log("Error fetching Vanar data: ", err);
+      }
+    };
+
+    fetchScrollGames();
+    fetchVanarGames();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -148,7 +175,7 @@ const Lobbies: NextPage = () => {
                 chainType="vanar"
               />
               {/* Real Data Testing */}
-              {games.map(game => (
+              {scrollGames.map(game => (
                 <LobbyCardTest
                   key={game.id}
                   id={game.id}
@@ -158,7 +185,24 @@ const Lobbies: NextPage = () => {
                   stakeAmount={game.stakeAmount}
                   duration={game.duration}
                   started={game.started}
+                  numOfPlayers={game.numOfPlayers}
+                  playerAddresses={game.playerAddresses}
                   chainType="scroll"
+                />
+              ))}
+              {vanarGames.map(game => (
+                <LobbyCardTest
+                  key={game.id}
+                  id={game.id}
+                  address={game.address}
+                  name={game.name}
+                  maxPlayers={game.maxPlayers}
+                  stakeAmount={game.stakeAmount}
+                  duration={game.duration}
+                  started={game.started}
+                  numOfPlayers={game.numOfPlayers}
+                  playerAddresses={game.playerAddresses}
+                  chainType="vanar"
                 />
               ))}
             </div>

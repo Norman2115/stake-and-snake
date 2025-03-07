@@ -18,6 +18,8 @@ interface LobbyCardProps {
   stakeAmount: string;
   duration: number;
   started: boolean;
+  playerAddresses: string[];
+  numOfPlayers: number;
   chainType: "scroll" | "vanar";
 }
 
@@ -29,32 +31,12 @@ export default function LobbyCardTest({
   stakeAmount,
   duration,
   started,
+  playerAddresses,
+  numOfPlayers,
   chainType,
 }: LobbyCardProps) {
   const router = useRouter();
   const { address: connectedAddress } = useAccount();
-
-  const {
-    data: prizePool,
-    isLoading: prizePoolLoading,
-    error: prizePoolError,
-    refetch: refetchPrizePool,
-  } = useReadContract({
-    abi: abi,
-    address: address,
-    functionName: "getPrizePool",
-  });
-
-  const {
-    data: players,
-    isLoading: playersLoading,
-    error: playersError,
-    refetch: refetchPlayers,
-  } = useReadContract({
-    abi: abi,
-    address: address,
-    functionName: "getPlayers",
-  });
 
   const { writeContractAsync, isPending } = useWriteContract();
   const writeTx = useTransactor();
@@ -72,39 +54,23 @@ export default function LobbyCardTest({
       return;
     }
 
-    if (Array.isArray(players) && players.includes(connectedAddress)) {
-      router.push(`/game/${id}`);
+    console.log("Connected Address: ", connectedAddress);
+    console.log("Player Addresses: ", playerAddresses[0]);
+
+    if (connectedAddress && playerAddresses.map(addr => addr.toLowerCase()).includes(connectedAddress.toLowerCase())) {
+      router.push(`/game/${chainType}/${id}`);
       return;
     }
 
     try {
       await writeTx(writeContractAsyncJoinGame);
-      router.push(`/game/${id}`);
+      router.push(`/game/${chainType}/${id}`);
     } catch (error) {
       console.log("Unexpected error in writeTx", error);
     }
   };
 
-  useWatchContractEvent({
-    abi: abi,
-    address: address,
-    eventName: "playerJoined",
-    onLogs: logs => {
-      console.log("Player joined event logs: ", logs);
-      refetchPlayers();
-      refetchPrizePool();
-    },
-  });
-
   const chainColor = chainType === "scroll" ? "bg-blue-500/20 text-blue-500" : "bg-purple-500/20 text-purple-500";
-
-  if (playersLoading || prizePoolLoading) {
-    return <></>;
-  }
-
-  if (playersError || prizePoolError) {
-    return <div>Error loading data</div>;
-  }
 
   return (
     <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-4 transition-all hover:border-green-500/50">
@@ -125,7 +91,7 @@ export default function LobbyCardTest({
             Players
           </div>
           <div>
-            {Array.isArray(players) ? players.length : 0}/{maxPlayers}
+            {numOfPlayers}/{maxPlayers}
           </div>
         </div>
         <div className="flex items-center justify-between">
