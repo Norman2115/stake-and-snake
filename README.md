@@ -60,16 +60,21 @@ cargo run -p graph-node --release -- \
 
 ## Features
 ### Choose Your Game Mode
+* You can choose between a casual lobby or competitive tournaments.
 
 ![Image](https://github.com/user-attachments/assets/bc27d09f-42eb-4be0-98c7-d606212e415c)
 
 ---
 
 ### Create Your Lobby Game
+* You can create your own lobbies or join games hosted by others!
+* Select your preferred stake amount and duration.
 
 ![Image](https://github.com/user-attachments/assets/ac053550-7020-48f6-b9a5-0006e2fdc022)
 
 ![Image](https://github.com/user-attachments/assets/16fd76c9-d803-4cfd-b58c-d939b4d7a170)
+
+* You can also create private lobbies and enjoy games with your friends without any interruptions.
 
 ![Image](https://github.com/user-attachments/assets/99fdbcd3-dc37-4def-9f73-a032c13ae746)
 
@@ -77,17 +82,25 @@ cargo run -p graph-node --release -- \
 
 ### Compete with Others
 
+* Time to compete with others! Get the best score within the time limit.
+* You can play again and keep beating your high score until the timer runs out.
+* The startGame, submitScore, and endGame operations are handled by the platform, but for demonstration purposes, we executed them manually.
+
 ![Image](https://github.com/user-attachments/assets/a35268dd-c328-4ed9-a1cd-4eb23e33415c)
 
 ---
 
 ### Register for Tournaments
 
+* If you’re looking for a more competitive and higher-stakes experience, sign up for our weekly tournaments!
+
 ![Image](https://github.com/user-attachments/assets/a414aebe-0804-4c0c-a275-217c0ef6109f)
 
 ---
 
 ### Fight for Podium
+
+* Finally, make it to the podium and earn your prizes.
 
 ![Image](https://github.com/user-attachments/assets/8ebbdeae-bb0b-4267-a90b-4154993f3096)
 
