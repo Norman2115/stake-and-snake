@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
+import abi from "../../../snake-subgraph-scroll/abis/TournamentGame.json";
 import { NextPage } from "next";
 import { parseEther } from "viem";
 import { useReadContract, useWriteContract } from "wagmi";
-import abi from "~~/abi/LobbyGame.json";
 
 const Test: NextPage = () => {
   const prizePool = useReadContract({
@@ -58,8 +58,8 @@ const Test: NextPage = () => {
         onClick={() =>
           writeContract({
             abi,
-            address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
-            functionName: "joinGame",
+            address: "0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84",
+            functionName: "joinTournament",
             args: [],
             value: parseEther("0.0001"),
           })
@@ -74,9 +74,9 @@ const Test: NextPage = () => {
         onClick={() =>
           writeContract({
             abi,
-            address: "0x75B8F4089a30C5c19081908676Ff24449DEee2f5",
+            address: "0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84",
             functionName: "submitScore",
-            args: [50],
+            args: [42069],
           })
         }
       >
@@ -103,7 +103,7 @@ const Test: NextPage = () => {
           writeContract({
             abi,
             address: "0xB5A7a73EcFfD7AA5D0152BE2425fADD06a818c42",
-            functionName: "endGame",
+            functionName: "endTournament",
             args: [],
           })
         }
