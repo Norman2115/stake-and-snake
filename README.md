@@ -2,7 +2,7 @@
 
 ## Description
 
-## Scroll
+## Scroll (Scroll Sepolia)
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C](https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C)
@@ -13,7 +13,7 @@
   * An example of a Tournament contract (Unverified, Child Contract).
   * [0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84](https://sepolia.scrollscan.com/address/0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84)
 
-## Vanar
+## Vanar (Vanguard)
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0x9a50e5c1B271CF445764a65a16234C484B335081](https://explorer-vanguard.vanarchain.com/address/0x9a50e5c1B271CF445764a65a16234C484B335081)
