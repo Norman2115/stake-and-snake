@@ -1,6 +1,11 @@
 # Stake & Snake
 
 ## Description
+"My brain is stuck!"
+
+"Boring kills projects"
+
+"2025 is a snake year!"
 
 ## Scroll (Scroll Sepolia)
 * SnakeFactory
