@@ -14,6 +14,8 @@
   * [0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84](https://sepolia.scrollscan.com/address/0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84)
 
 ## Vanar (Vanguard)
+Gaming is one of the Big 5 use cases of Vanar Chain. The fast transactions and fixed low fees aspects of Vanar make it ideal for a gaming platform where players can enjoy without worrying about high gas fees.
+
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0x9a50e5c1B271CF445764a65a16234C484B335081](https://explorer-vanguard.vanarchain.com/address/0x9a50e5c1B271CF445764a65a16234C484B335081)
