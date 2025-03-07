@@ -24,7 +24,18 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 
 Unfortunately, we couldn't provide the endpoint for the Vanguard subgraph as it is running on our local Graph Node. However, here are some screenshots.
 
+### The Subgraph Explorer for Vanguard
 ![Image](https://github.com/user-attachments/assets/4f3cc951-f8b7-4b02-afbc-30f234479354)
+
+---
+
+### The Graph Node for Vanguard
+```
+cargo run -p graph-node --release -- \
+  --postgres-url postgresql://orman:password@localhost:5432/graph-node \
+  --ethereum-rpc mainnet:https://rpc-vanguard.vanarchain.com \
+  --ipfs 127.0.0.1:5001
+```
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 
 ## Features
