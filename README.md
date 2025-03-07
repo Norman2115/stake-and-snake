@@ -59,6 +59,13 @@ cargo run -p graph-node --release -- \
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 
 ## Features
+### Choose Your Game Mode
+
+![Image](https://github.com/user-attachments/assets/bc27d09f-42eb-4be0-98c7-d606212e415c)
+
+---
+
+
 
 ## Things to Add
 
