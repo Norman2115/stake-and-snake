@@ -14,7 +14,7 @@ type GameCreated @entity {
   numOfPlayers: Int! # uint8
 }
 
-type TournamentCreated @entity(immutable: true) {
+type TournamentCreated @entity {
   id: Bytes!
   tournamentAddress: Bytes! # address
   name: String! # string
@@ -25,6 +25,8 @@ type TournamentCreated @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  ended: Boolean! # bool
+  numOfPlayers: Int! # uint8
 }
 type GameEnded @entity(immutable: true) {
   id: Bytes!
@@ -108,4 +110,47 @@ type TScoreSubmitted @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+}
+
+type Game @entity {
+  id: Bytes!
+  address: Bytes! # address
+  creator: Bytes! # address
+  name: String! # string
+  stakeAmount: BigInt! # uint256
+  maxPlayers: Int! # uint8
+  duration: BigInt! # uint256
+  started: Boolean! # bool
+  ended: Boolean! # bool
+  numOfPlayers: Int! # uint8
+  playerScores: [PlayerScore!]! @derivedFrom(field: "game")
+}
+
+type PlayerScore @entity {
+  id: Bytes!
+  player: Bytes! # address
+  score: BigInt! # uint256
+  game: Game!
+  quitted: Boolean! # bool
+}
+
+type TournamentGame @entity {
+  id: Bytes!
+  address: Bytes! # address
+  name: String! # string
+  entryFee: BigInt! # uint256
+  maxPlayers: BigInt! # uint256
+  duration: BigInt! # uint256
+  isWeekly: Boolean! # bool
+  started: Boolean! # bool
+  ended: Boolean! # bool
+  numOfPlayers: Int! # uint8
+  playerScores: [TPlayerScore!]! @derivedFrom(field: "game")
+}
+
+type TPlayerScore @entity {
+  id: Bytes!
+  player: Bytes! # address
+  score: BigInt! # uint256
+  game: TournamentGame!
 }

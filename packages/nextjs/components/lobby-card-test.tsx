@@ -99,7 +99,7 @@ export default function LobbyCardTest({
   const chainColor = chainType === "scroll" ? "bg-blue-500/20 text-blue-500" : "bg-purple-500/20 text-purple-500";
 
   if (playersLoading || prizePoolLoading) {
-    return <>Loading...</>;
+    return <></>;
   }
 
   if (playersError || prizePoolError) {

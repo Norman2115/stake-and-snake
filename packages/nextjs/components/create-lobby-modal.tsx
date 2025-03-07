@@ -111,7 +111,7 @@ export function CreateLobbyModal() {
   const writeContractAsyncCreateLobby = () =>
     writeContractAsync({
       abi: abi,
-      address: "0xcfd39e4B83dCB7bb831eFcfE8d428EdA25D008AB",
+      address: "0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C",
       functionName: "createGame",
       args: [lobbyName, parseEther(stakeAmount), parseInt(maxPlayers), BigInt(parseInt(duration))],
       value: parseEther(stakeAmount),

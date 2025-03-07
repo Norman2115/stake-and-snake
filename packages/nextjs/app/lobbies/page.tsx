@@ -23,9 +23,9 @@ const Lobbies: NextPage = () => {
   useEffect(() => {
     const gameQuery = gql`
       query {
-        gameCreateds(where: { ended: false }) {
+        games(where: { ended: false }) {
           id
-          gameAddress
+          address
           creator
           name
           started
@@ -152,7 +152,7 @@ const Lobbies: NextPage = () => {
                 <LobbyCardTest
                   key={game.id}
                   id={game.id}
-                  address={game.gameAddress}
+                  address={game.address}
                   name={game.name}
                   maxPlayers={game.maxPlayers}
                   stakeAmount={game.stakeAmount}
