@@ -4,7 +4,7 @@
 
 ## Scroll
 * SnakeFactory
-  * Factory contract that deploys contracts to manage each Lobby and Tournament Game (Verified).
+  * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C
 * LobbyGame
   * An example of a LobbyGame contract (Unverified, Child Contract).
@@ -22,10 +22,10 @@ TournamentGame - 0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc
 
 ## The Graph
 Our game is fully powered by The Graph, from lobby games and tournament matches to the leaderboard. We store data on-chain for player transparency and use The Graph's subgraph to fetch and organize it efficiently.
-* [Here](packages/snake-subgraph-scroll/) is the repository for the subgraph indexing the Scroll Sepolia network.
-* [Here](packages/snake-graph-vanar/) is the repository for the subgraph indexing the Vanguard network.
+* [Here](packages/snake-subgraph-scroll/) is the repository for the subgraph indexing the **Scroll Sepolia** network.
+* [Here](packages/snake-graph-vanar/) is the repository for the subgraph indexing the **Vanguard** network.
 * TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
-* For the frontend subgraph integration, we use Apollo Client to fetch data from the subgraph. [Here](packages/nextjs/app/lobbies/page.tsx#L16-L77) is an example.
+* For the frontend subgraph integration, we use **Apollo Client** to fetch data from the subgraph. [Here](packages/nextjs/app/lobbies/page.tsx#L16-L77) is an example.
 
 Unfortunately, we couldn't provide the endpoint for the Vanguard subgraph as it is running on our local Graph Node. However, here are some screenshots.
 
