@@ -3,7 +3,7 @@
 ## Description
 "My brain is stuck!"
 
-"Boring kills projects"
+"I want to make something fun"
 
 "2025 is a snake year!"
 
