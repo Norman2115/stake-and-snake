@@ -126,10 +126,10 @@ cargo run -p graph-node --release -- \
   *  The platform can generate extra income.
 
 ## Special Thanks
-We was a total newbie when it came to The Graph, and huge thanks to Soh Zhe Hong a.k.a HH for the week-long mentorship. It was brain stuck and overwhelming at first but after successfully writing relationships between data tables, it all started to make sense.
+We was a total newbie when it came to The Graph, and huge thanks to **Soh Zhe Hong** a.k.a **HH** for the week-long mentorship. It was brain stuck and overwhelming at first but after successfully writing relationships between data tables, it all started to make sense.
 
-Huge shoutout to RH. Introducing us one of the best tool - the Scaffold-ETH and conducted workshop on it, which became the foundation for this entire project. Funny enough, I couldn’t even deploy properly using it during my last hackathon.
+Huge shoutout to **RH**. Introducing us one of the best tool - the Scaffold-ETH and conducted workshop on it, which became the foundation for this entire project. Funny enough, I couldn’t even deploy properly using it during my last hackathon.
 
-Also, not forgetting the Vanar Team for helping us with the Vanar deployment. 
+Also, not forgetting the **Vanar Team** for helping us with the Vanar deployment. 
 
 As someone still fairly new to the Web 3 space, we strives to learn more and improve.
