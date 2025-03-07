@@ -1,4 +1,4 @@
-# WarranX
+# Stake and Snake
 
 ## Description
 
