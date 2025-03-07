@@ -7,6 +7,8 @@
 
 "2025 is a snake year!"
 
+Oh, the Nokia 3310 OG Snake game? Yep, that’s how we got here. We aim to solve the problem where many Web3 games are overly focused on blockchain incentives and have complex UIs. As a newcomer myself, it can be quite difficult for us who are just trying to explore around. Our focus is on making the experience simple, fun, and user-friendly at a glance.
+
 ## Scroll (Scroll Sepolia)
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
