@@ -11,11 +11,11 @@ Oh, the Nokia 3310 OG Snake game? Yep, that’s how we got here. We aim to solve
 
 Stake & Snake is a Web3 snake game that merges the nostalgia of the classic Snake with blockchain staking. Snake game, but at Web 3, with staking. Players can stake and compete, with first place taking all in public/private lobbies, while tournaments reward the top 10 ranked players on the podium, with higher ranks earning a bigger cut. A 5%–10% fee is taken from the prize pools to keep the platform running and cover gas fees for automated operations.
 
+If you're looking for features and pages, [here](https://github.com/Norman2115/stake-and-snake/blob/main/README.md#features) they are.
+
 🚨 Disclaimer 🚨
 
 The game is a prototype. If you spot any mathematical miscalculations... Just pretend it’s abstract art and move on.
-
-If you're looking for features and pages, [here](https://github.com/Norman2115/stake-and-snake/blob/main/README.md#features) they are.
 
 ## Scroll (Scroll Sepolia)
 * SnakeFactory
@@ -113,5 +113,20 @@ cargo run -p graph-node --release -- \
 ---
 
 ## Things to Add
+* Airdrops
+  * For loyal users who play for a long time to reward them with collectibles such as website themes and custom snake designs as in NFTs.
+* Cross-Chain Compatibility.
+  * Stake directly from their wallets using their existing coins makes gameplay easier compared to platforms that require a separate in-game token.
+  * Develop a zero-fee bridging solution for players to join lobbies and tournaments with different coins across multiple chains.
+* More Competitiveness
+  * Instead of just individual play, we could implement a Slither.io concept.
+  * Multiple players compete in real-time on the same map.
+* Yield Farming
+  *  Yield farming protocols could provide an additional revenue stream during week-long tournaments.
+  *  The platform can generate extra income.
 
 ## Special Thanks
+We was a total newbie when it came to The Graph, and huge thanks to Soh Zhe Hong a.k.a HH for the week-long mentorship. It was brain stuck and overwhelming at first but after successfully writing relationships between data tables, it all started to make sense.
+
+
+
