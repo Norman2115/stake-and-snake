@@ -21,6 +21,7 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 - [Here](packages/snake-subgraph-scroll/) is the repository for the subgraph indexing the Scroll Sepolia network.
 - [Here](packages/snake-graph-vanar/) is the repository for the subgraph indexing the Vanguard network.
 - TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
+
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 ![Image](https://github.com/user-attachments/assets/4f3cc951-f8b7-4b02-afbc-30f234479354)
 
