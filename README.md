@@ -131,3 +131,5 @@ We was a total newbie when it came to The Graph, and huge thanks to Soh Zhe Hong
 Huge shoutout to RH. Introducing us one of the best tool - the Scaffold-ETH and conducted workshop on it, which became the foundation for this entire project. Funny enough, I couldn’t even deploy properly using it during my last hackathon.
 
 Also, not forgetting the Vanar Team for helping us with the Vanar deployment. 
+
+As someone still fairly new to the Web 3 space, we strives to learn more and improve.
