@@ -77,5 +77,11 @@ export function handleTScoreSubmitted(event: TScoreSubmittedEvent): void {
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
+  let tPlayerScore = TPlayerScore.load(event.params.player);
+  if (tPlayerScore !== null) {
+    tPlayerScore.score = event.params.score;
+    tPlayerScore.save();
+  }
+
   entity.save();
 }

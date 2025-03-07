@@ -156,5 +156,11 @@ export function handleScoreSubmitted(event: ScoreSubmittedEvent): void {
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
+  let playerScore = PlayerScore.load(event.params.player);
+  if (playerScore !== null) {
+    playerScore.score = event.params.score;
+    playerScore.save();
+  }
+
   entity.save();
 }
