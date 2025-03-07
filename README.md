@@ -23,6 +23,7 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 - TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
 <br />
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
+<br />
 ![Image](https://github.com/user-attachments/assets/4f3cc951-f8b7-4b02-afbc-30f234479354)
 ## Features
 
