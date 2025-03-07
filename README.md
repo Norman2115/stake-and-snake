@@ -20,9 +20,8 @@ TournamentGame - 0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc
 Our game is fully powered by The Graph, from lobby games and tournament matches to the leaderboard. We store data on-chain for player transparency and use The Graph's subgraph to fetch and organize it efficiently. This eliminates the need to use getters in smart contracts, which are unstructured and inefficient.
 - [Here](packages/snake-subgraph-scroll/) is the repository for the subgraph indexing the Scroll Sepolia network.
 - [Here](packages/snake-graph-vanar/) is the repository for the subgraph indexing the Vanguard network.
-
-<br />Ï
-https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
+- TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
+<br />
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 ![Image](https://github.com/user-attachments/assets/4f3cc951-f8b7-4b02-afbc-30f234479354)
 ## Features
