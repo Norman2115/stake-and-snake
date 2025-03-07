@@ -15726,9 +15726,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"snake-graph-scroll@workspace:packages/snake-graph-scroll":
+"snake-graph-vanar@workspace:packages/snake-graph-vanar":
   version: 0.0.0-use.local
-  resolution: "snake-graph-scroll@workspace:packages/snake-graph-scroll"
+  resolution: "snake-graph-vanar@workspace:packages/snake-graph-vanar"
   dependencies:
     "@graphprotocol/graph-cli": 0.96.0
     "@graphprotocol/graph-ts": 0.37.0

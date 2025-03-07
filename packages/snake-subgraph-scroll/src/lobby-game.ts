@@ -15,7 +15,7 @@ import {
   PlayerScore,
   ScoreSubmitted,
 } from "../generated/schema";
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export function handleGameEnded(event: GameEndedEvent): void {
   let entity = new GameEnded(
@@ -94,6 +94,7 @@ export function handlePlayerJoined(event: PlayerJoinedEvent): void {
   let game = Game.load(event.params.contractAddress);
   if (game !== null) {
     game.numOfPlayers = game.numOfPlayers + 1;
+    game.playerAddresses = game.playerAddresses.concat([event.params.player]);
     game.save();
   }
 
@@ -132,6 +133,14 @@ export function handlePlayerQuit(event: PlayerQuitEvent): void {
   let game = Game.load(event.params.contractAddress);
   if (game !== null) {
     game.numOfPlayers = game.numOfPlayers - 1;
+    let updatedPlayerAddresses: Bytes[] = [];
+    for (let i = 0; i < game.playerAddresses.length; i++) {
+      if (game.playerAddresses[i] != event.params.player) {
+        updatedPlayerAddresses.push(game.playerAddresses[i]);
+      }
+    }
+
+    game.playerAddresses = updatedPlayerAddresses;
     game.save();
   }
 

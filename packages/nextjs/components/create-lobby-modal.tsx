@@ -50,6 +50,11 @@ export function CreateLobbyModal() {
     cache: new InMemoryCache(),
   });
 
+  const chainToFactoryMap = {
+    scroll: "0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C",
+    vanar: "0x9a50e5c1B271CF445764a65a16234C484B335081",
+  };
+
   const fetchNewGameData = async () => {
     const newGameQuery = gql`
     query {
@@ -111,7 +116,7 @@ export function CreateLobbyModal() {
   const writeContractAsyncCreateLobby = () =>
     writeContractAsync({
       abi: abi,
-      address: "0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C",
+      address: chainToFactoryMap[selectedChain],
       functionName: "createGame",
       args: [lobbyName, parseEther(stakeAmount), parseInt(maxPlayers), BigInt(parseInt(duration))],
       value: parseEther(stakeAmount),
@@ -133,9 +138,10 @@ export function CreateLobbyModal() {
     setLobbyCode(generateLobbyCode());
     if (newGameData && isCreated) {
       setTimeout(() => {
-        router.push(`/game/${newGameData.gameAddress}`);
+        router.push(`/game/${selectedChain}/${newGameData.gameAddress}`);
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newGameData, router, isCreated]);
 
   return (
