@@ -7,10 +7,10 @@
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C](https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C)
 * LobbyGame
-  * An example of a LobbyGame contract (Child Contract).
+  * An example of a LobbyGame contract.
   * [0x680BC51c1B35CbA280Ff61a655Db3612BCE45977](https://sepolia.scrollscan.com/address/0x680BC51c1B35CbA280Ff61a655Db3612BCE45977)
 * TournamentGame
-  * An example of a Tournament contract (Child Contract).
+  * An example of a Tournament contract.
   * [0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84](https://sepolia.scrollscan.com/address/0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84)
 
 ## Vanar (Vanguard)
@@ -18,10 +18,10 @@
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
   * [0x9a50e5c1B271CF445764a65a16234C484B335081](https://explorer-vanguard.vanarchain.com/address/0x9a50e5c1B271CF445764a65a16234C484B335081)
 * LobbyGame
-  * An example of a LobbyGame contract (Child Contract).
+  * An example of a LobbyGame contract.
   * [0xcefd63639860723e4218ae0b819aa989ea86a44e](https://explorer-vanguard.vanarchain.com/address/0xCEFd63639860723E4218AE0B819aA989ea86a44e)
 * TournamentGame
-  * An example of a Tournament contract (Child Contract).
+  * An example of a Tournament contract.
   * [0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc](https://explorer-vanguard.vanarchain.com/address/0xa7C03Ca17d4A5efA1B7dBD7050CcfffDCa5af0FC)
 
 ## The Graph
