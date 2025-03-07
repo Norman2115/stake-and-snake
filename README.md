@@ -18,7 +18,7 @@ TournamentGame - 0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc
 
 ## The Graph
 ![Image](https://github.com/user-attachments/assets/4f3cc951-f8b7-4b02-afbc-30f234479354)
-
+![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 ## Features
 
 ## Things to Add
