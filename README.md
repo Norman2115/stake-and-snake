@@ -15,6 +15,8 @@ Stake & Snake is a Web3 snake game that merges the nostalgia of the classic Snak
 
 The game is a prototype. If you spot any mathematical miscalculations... Just pretend it’s abstract art and move on.
 
+If you're looking for features and pages, [here](https://github.com/Norman2115/stake-and-snake/blob/main/README.md#features) they are.
+
 ## Scroll (Scroll Sepolia)
 * SnakeFactory
   * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
