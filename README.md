@@ -9,7 +9,7 @@
 
 Oh, the Nokia 3310 OG Snake game? Yep, that’s how we got here. We aim to solve the problem where many Web3 games are overly focused on blockchain incentives and have complex UIs. As a newcomer myself, it can be quite difficult for us who are just trying to explore around. Our focus is on making the experience simple, fun, and user-friendly at a glance.
 
-Stake & Snake is a Web3 snake game that merges the nostalgia of the OG classic Snake with blockchain-powered staking. Snake game, but at Web 3, with staking. Players can stake and compete, with first place taking all in public/private lobbies, while tournaments reward the top 10 ranked players on the podium, with higher ranks earning a bigger cut. A 5%–10% fee is taken from the prize pools to keep the platform running and cover gas fees for automated operations.
+Stake & Snake is a Web3 snake game that merges the nostalgia of the classic Snake with blockchain staking. Snake game, but at Web 3, with staking. Players can stake and compete, with first place taking all in public/private lobbies, while tournaments reward the top 10 ranked players on the podium, with higher ranks earning a bigger cut. A 5%–10% fee is taken from the prize pools to keep the platform running and cover gas fees for automated operations.
 
 ## Scroll (Scroll Sepolia)
 * SnakeFactory
