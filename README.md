@@ -15,14 +15,14 @@
 
 ## Vanar
 * SnakeFactory
- * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
- * [0x9a50e5c1B271CF445764a65a16234C484B335081](https://explorer-vanguard.vanarchain.com/address/0x9a50e5c1B271CF445764a65a16234C484B335081)
+  * Factory contract that deploys contracts to manage Lobby and Tournament Games (Verified).
+  * [0x9a50e5c1B271CF445764a65a16234C484B335081](https://explorer-vanguard.vanarchain.com/address/0x9a50e5c1B271CF445764a65a16234C484B335081)
 * LobbyGame
- * An example of a LobbyGame contract (Unverified, Child Contract).
- * [0xcefd63639860723e4218ae0b819aa989ea86a44e](https://explorer-vanguard.vanarchain.com/address/0xCEFd63639860723E4218AE0B819aA989ea86a44e)
+  * An example of a LobbyGame contract (Unverified, Child Contract).
+  * [0xcefd63639860723e4218ae0b819aa989ea86a44e](https://explorer-vanguard.vanarchain.com/address/0xCEFd63639860723E4218AE0B819aA989ea86a44e)
 * TournamentGame
- * An example of a Tournament contract (Unverified, Child Contract).
- * [0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc](https://explorer-vanguard.vanarchain.com/address/0xa7C03Ca17d4A5efA1B7dBD7050CcfffDCa5af0FC)
+  * An example of a Tournament contract (Unverified, Child Contract).
+  * [0xa7c03ca17d4a5efa1b7dbd7050ccfffdca5af0fc](https://explorer-vanguard.vanarchain.com/address/0xa7C03Ca17d4A5efA1B7dBD7050CcfffDCa5af0FC)
 
 ## The Graph
 Our game is fully powered by The Graph, from lobby games and tournament matches to the leaderboard. We store data on-chain for player transparency and use The Graph's subgraph to fetch and organize it efficiently.
