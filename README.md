@@ -65,7 +65,11 @@ cargo run -p graph-node --release -- \
 
 ---
 
+### Create Your Lobby Game
 
+![Image](https://github.com/user-attachments/assets/ac053550-7020-48f6-b9a5-0006e2fdc022)
+
+---
 
 ## Things to Add
 
