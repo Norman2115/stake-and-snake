@@ -1,4 +1,4 @@
-# Stake & Snake
+# Stake & Snake (ETH Uprising)
 
 ## Description
 "My brain is stuck!"
