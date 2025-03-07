@@ -3,13 +3,15 @@
 ## Description
 
 ## Scroll
-* SnakeFactory - 0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C (Verified)
-* 
-** https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C
-<br />
-LobbyGame - 0x680BC51c1B35CbA280Ff61a655Db3612BCE45977
-<br />
-TournamentGame - 0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84
+* SnakeFactory
+  * Main factory contract that deploys contracts to manage each Lobby Game and Tournament Game.Ï
+  * https://sepolia.scrollscan.com/address/0xE04aD003257688aF5fbe34f80D26D3e1463Bc41C (Verified)
+* LobbyGame
+  * An example of a LobbyGame contract (Unverified, Child Contract).
+  * https://sepolia.scrollscan.com/address/0x680BC51c1B35CbA280Ff61a655Db3612BCE45977
+* TournamentGame
+  * An example of a Tournament contract (Unverified, Child Contract).
+  * https://sepolia.scrollscan.com/address/0xecEF5Df87D5CA93f2c99F955e0320EF65cf6dC84
 
 ## Vanar
 SnakeFactory - 0x9a50e5c1B271CF445764a65a16234C484B335081 (Verified)
