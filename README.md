@@ -53,6 +53,8 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 ### The Graph Video
 [![Watch the video](https://img.youtube.com/vi/UUZzyHaSpgY/maxresdefault.jpg)](https://youtu.be/UUZzyHaSpgY)
 
+---
+
 We decided to make it cross-chain, with a single subgraph querying each chain. Unfortunately, we couldn't provide the endpoint for the Vanguard subgraph as it is running on our **local Graph Node**. However, here are some screenshots.
 
 ### The Subgraph Explorer for Vanguard
