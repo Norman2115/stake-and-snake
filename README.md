@@ -66,6 +66,9 @@ cargo run -p graph-node --release -- \
 ```
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
 
+### Video for The Graph
+[![Watch the video](https://img.youtube.com/vi/UUZzyHaSpgY/maxresdefault.jpg)](https://youtu.be/UUZzyHaSpgY)
+
 ## Features
 ### Choose Your Game Mode
 * You can choose between a casual lobby or competitive tournaments.
