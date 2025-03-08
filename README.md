@@ -50,7 +50,7 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 * TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
 * For the frontend subgraph integration, we use **Apollo Client** to fetch data from the subgraph. [Here](packages/nextjs/app/lobbies/page.tsx#L16-L77) is an example.
 
-### The Graph Video
+### Dedicated The Graph Video
 [![Watch the video](https://img.youtube.com/vi/UUZzyHaSpgY/maxresdefault.jpg)](https://youtu.be/UUZzyHaSpgY)
 
 ---
