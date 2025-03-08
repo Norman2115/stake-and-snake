@@ -50,6 +50,9 @@ Our game is fully powered by The Graph, from lobby games and tournament matches 
 * TheGraph Endpoint: https://api.studio.thegraph.com/query/104999/snake-subgraph-scroll/version/latest
 * For the frontend subgraph integration, we use **Apollo Client** to fetch data from the subgraph. [Here](packages/nextjs/app/lobbies/page.tsx#L16-L77) is an example.
 
+### The Graph Video
+[![Watch the video](https://img.youtube.com/vi/UUZzyHaSpgY/maxresdefault.jpg)](https://youtu.be/UUZzyHaSpgY)
+
 We decided to make it cross-chain, with a single subgraph querying each chain. Unfortunately, we couldn't provide the endpoint for the Vanguard subgraph as it is running on our **local Graph Node**. However, here are some screenshots.
 
 ### The Subgraph Explorer for Vanguard
@@ -65,9 +68,6 @@ cargo run -p graph-node --release -- \
   --ipfs 127.0.0.1:5001
 ```
 ![Image](https://github.com/user-attachments/assets/53d92c92-5ebb-4e9c-8424-3a9b43574171)
-
-### Video for The Graph
-[![Watch the video](https://img.youtube.com/vi/UUZzyHaSpgY/maxresdefault.jpg)](https://youtu.be/UUZzyHaSpgY)
 
 ## Features
 ### Choose Your Game Mode
